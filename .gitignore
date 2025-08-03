@@ -1,0 +1,27 @@
+# Archivos de compilación de LaTeX
+*.aux
+*.log
+*.out
+*.toc
+*.lot
+*.lof
+*.idx
+*.ist
+*.ilg
+*.bbl
+*.blg
+*.nav
+*.snm
+*.vrb
+*.vrb
+*.tdo
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+_minted-*.pyg
+*.pdf
+
+# Archivos de editor
+*.bak
+*~
+.#*

@@ -1,0 +1,195 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{graphicx}
+\graphicspath{{./figuras/}}
+\usepackage[a4paper, left=2cm, right=2cm, top=2.5cm, bottom=2.5cm]{geometry}
+\usepackage{xcolor} % Añadido para usar colores
+
+% Definir un color para los títulos (puedes ajustar el color como quieras)
+\definecolor{azulUPP}{RGB}{0,70,128} % Un azul corporativo o tecnológico
+
+% Redefinir el formato de las secciones y subsecciones para incluir color
+\usepackage{titlesec}
+\titleformat{\section}{\Large\bfseries\color{azulUPP}}{}{0em}{\MakeUppercase}[]
+\titleformat{\subsection}{\large\bfseries\color{azulUPP}}{}{0em}{}[]
+\titleformat{\subsubsection}{\bfseries\color{azulUPP}}{}{0em}{}[]
+
+\begin{document}
+	% Portada
+	\begin{titlepage}
+		\centering
+		% Logos institucionales y nombre de la universidad
+		\includegraphics[width=0.25\textwidth]{logoUpp} \hspace{7cm} 
+		\includegraphics[width=0.25\textwidth]{logoSftw}
+		\vspace{2cm}
+		
+		\Huge \textbf{Universidad Politécnica de Pachuca}\\
+		\vspace{0.5cm}
+		\Large Ingeniería en Software
+		\vspace{1cm}
+		
+		% Titulo
+		\Huge \textbf{Conceptos Teóricos - Proyecto de Tercer Parcial.}
+		\vspace{1cm}
+		
+		% Información completa
+		\Large \textbf{Materia:} Arquitectura de computadoras \\
+		\Large \textbf{Docente:} Víctor Hainy\\
+		\vspace{1cm}
+		\Large \textbf{Alumno:} \\Peña Serrano José Abraham\\
+		\vspace{1cm}
+		\Large \textbf{Matricula:} \\2331123273\\
+		\vspace{1cm}
+		\Large \textbf{Grupo:} SFTW\_06\_01\\
+		\vspace{1cm}
+		\Large \textbf{Cuatrimestre:} Mayo - Agosto 2025
+		
+	\end{titlepage}
+	
+	\tableofcontents
+	
+	\newpage
+	\section{Objetivo de aprendizaje}
+	Describir el uso y funcionamiento de los microcontroladores, actuadores y sistemas embebido en sistemas reales aplicados.
+	
+	\section{Conceptos Teóricos}
+	
+	\subsection{Microcontroladores}
+	\subsubsection{Definición}
+	Un \textbf{microcontrolador} es un circuito integrado que incluye en un solo chip los elementos esenciales de un sistema informático: una unidad central de procesamiento (CPU), memoria (RAM y ROM/Flash) y periféricos de entrada/salida (E/S). A diferencia de los microprocesadores convencionales, los microcontroladores están diseñados para controlar dispositivos específicos o sistemas embebidos, realizando tareas concretas de manera automática y eficiente. Se encuentran en aplicaciones tan variadas como electrodomésticos, automóviles, sistemas de automatización industrial y dispositivos médicos.
+	
+	El microcontrolador es el “cerebro” de sistemas electrónicos autónomos, permitiendo la interacción con el entorno y la automatización de tareas específicas sin requerir la intervención continua de un usuario.
+	
+	\subsubsection{Tipos}
+	Existen varios criterios para clasificar los microcontroladores, siendo los más comunes:
+	
+	\begin{itemize}
+		\item \textbf{Por arquitectura:}
+		\begin{itemize}
+			\item \textit{Basados en arquitectura Harvard:} Separan físicamente la memoria de instrucciones y de datos (por ejemplo, la familia PIC).
+			\item \textit{Basados en arquitectura Von Neumann:} Comparten el mismo bus para instrucciones y datos (como algunos modelos de 8051).
+		\end{itemize}
+		\item \textbf{Por tamaño de palabra (bits):}
+		\begin{itemize}
+			\item Microcontroladores de 8 bits: Los más extendidos en aplicaciones sencillas y de bajo costo, como el 8051 o los PIC de gama baja.
+			\item Microcontroladores de 16 bits: Ofrecen mayor capacidad de procesamiento para sistemas más complejos.
+			\item Microcontroladores de 32 bits: Destinados a aplicaciones que requieren alto rendimiento, como ARM Cortex-M usados en IoT y entornos industriales.
+		\end{itemize}
+		\item \textbf{Por fabricante/familia:}
+		\begin{itemize}
+			\item 8051: Amplia trayectoria en aplicaciones industriales y educativas.
+			\item PIC: Desarrollados por Microchip, populares en electrónica y automatización.
+			\item AVR: Utilizados en plataformas Arduino, ideales para prototipado educativo.
+			\item ARM: Reconocidos por eficiencia y potencia, usados en aplicaciones comerciales.
+		\end{itemize}
+	\end{itemize}
+	
+	\subsubsection{Componentes y Características}
+	Los microcontroladores integran los siguientes \textbf{componentes principales}:
+	
+	\begin{itemize}
+		\item \textbf{CPU (Unidad Central de Procesamiento):} La parte que ejecuta instrucciones y procesa datos.
+		\item \textbf{Memoria RAM:} Almacenamiento temporal para datos en ejecución.
+		\item \textbf{Memoria ROM/Flash:} Almacena el programa y datos permanentes; puede ser reprogramable.
+		\item \textbf{Periféricos de Entrada/Salida (E/S):} Puertos digitales, ADC, PWM, interfaces de comunicación (USART, SPI, I2C, CAN, USB, etc.).
+		\item \textbf{Temporizadores y contadores:} Para controlar eventos temporales.
+		\item \textbf{Convertidores Analógico-Digital (ADC) y Digital-Analógico (DAC):} Para manejo de señales analógicas.
+		\item \textbf{Módulos de comunicación:} UART, SPI, I2C, CAN, que permiten interacción con otros dispositivos.
+		\item \textbf{Reloj interno o externo:} Para sincronización y control del rendimiento.
+	\end{itemize}
+	
+	Entre sus \textbf{características} destacan:
+	
+	\begin{itemize}
+		\item Bajo consumo energético y modos de ahorro de energía.
+		\item Tamaño compacto y bajo costo.
+		\item Facilidad de reprogramación y vasto soporte en herramientas de desarrollo.
+		\item Resistencia a ambientes adversos con encapsulados específicos.
+	\end{itemize}
+	
+	\subsubsection{Proceso de Selección}
+	Para seleccionar un microcontrolador adecuado según la función del proyecto, se deben considerar varios factores:
+	
+	\begin{itemize}
+		\item \textbf{Tipo de aplicación:} Complejidad del sistema y tareas a realizar.
+		\item \textbf{Cantidad y tipo de entradas/salidas necesarias:} Digitales, analógicas, PWM, etc.
+		\item \textbf{Memoria requerida:} Para almacenar código y datos.
+		\item \textbf{Velocidad y capacidad de procesamiento:} De acuerdo a la carga operativa.
+		\item \textbf{Interfaces de comunicación:} Protocolos necesarios para comunicación con otros dispositivos.
+		\item \textbf{Consumo de energía:} Especialmente importante en aplicaciones portátiles o alimentadas por batería.
+		\item \textbf{Disponibilidad de soporte técnico:} Documentación, comunidad y herramientas compatibles.
+		\item \textbf{Costo y disponibilidad:} Que se ajusten al presupuesto y se puedan obtener fácilmente.
+	\end{itemize}
+	
+	Una selección cuidadosa asegura eficiencia, economía y funcionalidad óptima del sistema embebido final.
+	
+	\vspace{0.5cm}
+	\noindent \textit{Referencias:} \\
+	Raúl A. Aquino Santos y Marien N. Rivera Gutiérrez, \textit{Microcontroladores. Fundamentos y aplicaciones}. \\
+	Microchip Technology, \textit{What is a Microcontroller?} \\
+	Texas Instruments, \textit{Selecting a Microcontroller}. 
+	
+
+	
+	\subsection{Instrucciones de microcontroladores}
+	\subsubsection{Sintaxis de Instrucciones}
+	\begin{itemize}
+		\item Describir la sintaxis de instrucciones de microcontroladores.
+	\end{itemize}
+	\subsubsection{Estructura de las Instrucciones}
+	\begin{itemize}
+		\item Explicar la estructura de las instrucciones de microcontroladores.
+	\end{itemize}
+	\subsubsection{Características y Tipos de Instrucciones}
+	\begin{itemize}
+		\item Describir las características y tipos de instrucciones de microcontroladores.
+	\end{itemize}
+	\subsubsection{Proceso de Codificación}
+	\begin{itemize}
+		\item Explicar el proceso de codificación de instrucciones de microcontroladores.
+	\end{itemize}
+	
+	\subsection{Programación de microcontroladores}
+	\subsubsection{Interfaces de microcontroladores}
+	\begin{itemize}
+		\item Reconocer los conceptos de señal analógica y digital.
+		\item Reconocer las características de los sistemas digitales y analógicos.
+		\item Definir el concepto de interfaz de microcontroladores.
+		\item Describir las características y tipos de interfaces de microcontroladores.
+		\item Definir el concepto de periférico de entrada y salida vinculado a microcontroladores.
+		\item Describir las características y tipos de periféricos de entrada y salida de microcontroladores. Los especificos del proyecto.
+		\item Explicar el proceso de conexión de interfaces de entrada y salida de microcontroladores con periféricos.
+		\item Explicar el proceso de programación de microcontroladores.
+	\end{itemize}
+	
+	\subsection{Sistemas embebidos}
+	\subsubsection{Definiciones}
+	\begin{itemize}
+		\item Definir los conceptos de sistema embebido, sensor y actuador.
+		
+		\subsubsection{Características y Tipos}
+		\begin{itemize}
+			\item Explicar las características y tipos de sistemas embebidos, sensores y actuadores... Diagrama de bloques elemento fisico actuador, etc. Todo es el sistema embebido.
+		\end{itemize}
+		\subsubsection{Plataformas de Sistemas Embebidos}
+		\begin{itemize}
+			\item Identificar las plataformas de sistemas embebidos.
+		\end{itemize}
+		\subsubsection{Proceso de Selección de Plataformas}
+		\begin{itemize}
+			\item Explicar el proceso de selección de plataformas de sistemas embebidos de acuerdo a la función del proyecto.... Por que eliguieron una pagina web a una app movil.
+		\end{itemize}
+		\subsubsection{Proceso de Diseño y Construcción}
+		\begin{itemize}
+			\item Explicar el proceso de diseño de sistemas embebidos.
+			\item Explicar el proceso de construcción de sistemas embebidos.
+		\end{itemize}
+		\subsubsection{Aplicaciones}
+		\begin{itemize}
+			\item Explicar las aplicaciones de microcontroladores en la robótica, domótica e internet de las cosas y como se integra en el proyecto... 
+		\end{itemize}
+	\end{itemize}
+		
+
+\end{document}
