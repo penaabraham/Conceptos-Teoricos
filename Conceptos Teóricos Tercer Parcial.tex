@@ -5,6 +5,7 @@
 \graphicspath{{./figuras/}}
 \usepackage[a4paper, left=2cm, right=2cm, top=2.5cm, bottom=2.5cm]{geometry}
 \usepackage{xcolor} % Añadido para usar colores
+\usepackage{amsmath}
 
 % Definir un color para los títulos (puedes ajustar el color como quieras)
 \definecolor{azulUPP}{RGB}{0,70,128} % Un azul corporativo o tecnológico
@@ -133,35 +134,160 @@
 
 	
 	\subsection{Instrucciones de microcontroladores}
+	Las instrucciones de microcontroladores son el lenguaje de máquina que el procesador entiende directamente. Aunque el lenguaje de programación de alto nivel como C++ se utiliza para el desarrollo, este es compilado a un lenguaje de ensamblador y luego a código de máquina para ser ejecutado por el microcontrolador.
+	
 	\subsubsection{Sintaxis de Instrucciones}
+	La sintaxis de las instrucciones en el lenguaje de ensamblador, que es el puente entre el código de alto nivel y el código de máquina, sigue una estructura bien definida. Esta sintaxis permite al programador escribir código de una manera legible antes de que sea convertido a su forma binaria. La estructura general es la siguiente:
+	
+	\begin{verbatim}
+		[etiqueta] opcode [operando1], [operando2], ... ; [comentario]
+	\end{verbatim}
+	
+	Cada componente tiene un rol específico:
 	\begin{itemize}
-		\item Describir la sintaxis de instrucciones de microcontroladores.
-	\end{itemize}
-	\subsubsection{Estructura de las Instrucciones}
-	\begin{itemize}
-		\item Explicar la estructura de las instrucciones de microcontroladores.
-	\end{itemize}
-	\subsubsection{Características y Tipos de Instrucciones}
-	\begin{itemize}
-		\item Describir las características y tipos de instrucciones de microcontroladores.
-	\end{itemize}
-	\subsubsection{Proceso de Codificación}
-	\begin{itemize}
-		\item Explicar el proceso de codificación de instrucciones de microcontroladores.
+		\item \textbf{Etiqueta (\textit{label}):} Es un identificador simbólico opcional que se coloca al inicio de una línea. Funciona como un marcador de posición para una dirección de memoria en particular. Las etiquetas son vitales para la legibilidad y la programación estructurada, ya que permiten hacer saltos (\texttt{JMP}) o llamadas a subrutinas (\texttt{CALL}) sin necesidad de conocer la dirección de memoria exacta.
+		\item \textbf{Opcode (\textit{Operation Code}):} Es el elemento principal de la instrucción. Es un mnemónico que representa una operación específica que el microcontrolador debe realizar. Por ejemplo, en la arquitectura del ESP32, un \texttt{MOV} podría mover un dato, un \texttt{ADD} podría sumar dos valores, y un \texttt{JMP} podría cambiar el flujo de ejecución del programa.
+		\item \textbf{Operandos (\textit{operands}):} Son los datos o las ubicaciones de memoria que la instrucción va a manipular. El número de operandos depende del tipo de instrucción. Pueden ser:
+		\begin{itemize}
+			\item \textit{Registros:} Almacenes de datos de alta velocidad dentro de la CPU (por ejemplo, \texttt{R1}, \texttt{R2}).
+			\item \textit{Valores inmediatos:} Datos constantes que se incluyen directamente en la instrucción (por ejemplo, el número `10`).
+			\item \textit{Direcciones de memoria:} Ubicaciones en la RAM o en la memoria Flash donde se encuentran los datos.
+		\end{itemize}
+		\item \textbf{Comentario (\textit{comment}):} Todo lo que sigue a un delimitador (como un punto y coma \texttt{;}) en una línea es un comentario. El ensamblador lo ignora, pero es fundamental para que el código sea comprensible para los humanos, documentando la lógica y el propósito de cada instrucción.
 	\end{itemize}
 	
-	\subsection{Programación de microcontroladores}
-	\subsubsection{Interfaces de microcontroladores}
+	\vspace{0.5cm}
+	
+	\textbf{Ejemplo de una instrucción simple:}
+	\begin{verbatim}
+		INICIO: MOV A, #50 ; Carga el valor 50 en el registro A
+	\end{verbatim}
+	En este ejemplo:
 	\begin{itemize}
-		\item Reconocer los conceptos de señal analógica y digital.
-		\item Reconocer las características de los sistemas digitales y analógicos.
-		\item Definir el concepto de interfaz de microcontroladores.
-		\item Describir las características y tipos de interfaces de microcontroladores.
-		\item Definir el concepto de periférico de entrada y salida vinculado a microcontroladores.
-		\item Describir las características y tipos de periféricos de entrada y salida de microcontroladores. Los especificos del proyecto.
-		\item Explicar el proceso de conexión de interfaces de entrada y salida de microcontroladores con periféricos.
-		\item Explicar el proceso de programación de microcontroladores.
+		\item \texttt{INICIO} es la etiqueta.
+		\item \texttt{MOV} es el opcode (mover).
+		\item \texttt{A} y \texttt{\#50} son los operandos (mover el valor 50 al registro A).
+		\item `Carga el valor 50 en el registro A` es el comentario.
 	\end{itemize}
+	\subsubsection{Estructura de las Instrucciones}
+	A nivel de máquina, cada instrucción de un microcontrolador se representa como una serie de bits con una estructura específica que la CPU puede decodificar y ejecutar. Esta estructura, que es la forma binaria de las instrucciones de ensamblador, típicamente se compone de los siguientes campos:
+	
+	\begin{itemize}
+		\item \textbf{Opcode (Código de Operación):} Es el campo fundamental de la instrucción. Ocupa los primeros bits y define de manera única la operación a realizar (por ejemplo, suma, resta, transferencia de datos). En una arquitectura de 32 bits como la del ESP32, el tamaño de este campo puede variar dependiendo de la complejidad de la instrucción.
+		\item \textbf{Modo de Direccionamiento:} Este campo especifica cómo la CPU debe acceder a los operandos. Algunos modos comunes son:
+		\begin{itemize}
+			\item \textit{Inmediato:} El valor del operando está directamente en la instrucción.
+			\item \textit{Directo:} La instrucción contiene la dirección de memoria donde se encuentra el operando.
+			\item \textit{Registro:} El operando se encuentra en uno de los registros de la CPU.
+		\end{itemize}
+		\item \textbf{Campos de Registros o Direcciones:} Contienen los identificadores de los registros que se utilizarán en la operación o la dirección de memoria a la que se va a acceder. En instrucciones con múltiples operandos, como una suma (\texttt{ADD}), se especifican los registros de origen y destino.
+	\end{itemize}
+	
+	Esta organización compacta y precisa permite que la CPU procese las instrucciones a una velocidad muy alta, realizando la acción deseada con los datos especificados.
+	
+	\subsubsection{Características y Tipos de Instrucciones}
+	Las instrucciones de un microcontrolador se pueden clasificar en varias categorías funcionales que cubren todas las operaciones que el dispositivo puede realizar. En la familia de microcontroladores Xtensa, como el ESP32, se encuentran los siguientes tipos principales:
+	
+	\begin{itemize}
+		\item \textbf{Instrucciones de transferencia de datos:} Estas instrucciones mueven datos entre diferentes ubicaciones, como entre registros, memoria RAM y memoria Flash. No alteran los datos, solo su ubicación.
+		\begin{itemize}
+			\item \texttt{MOV}: Mueve un dato de un lugar a otro.
+			\item \texttt{LOAD}: Carga un dato desde la memoria a un registro.
+			\item \texttt{STORE}: Almacena un dato de un registro en la memoria.
+		\end{itemize}
+		\item \textbf{Instrucciones aritméticas y lógicas:} Realizan operaciones matemáticas (suma, resta) y lógicas (AND, OR, XOR) con los datos. Son esenciales para el procesamiento de información y la toma de decisiones.
+		\begin{itemize}
+			\item \texttt{ADD}: Suma dos operandos.
+			\item \texttt{SUB}: Resta dos operandos.
+			\item \texttt{AND}, \texttt{OR}: Realizan operaciones lógicas a nivel de bits.
+		\end{itemize}
+		\item \textbf{Instrucciones de control de flujo:} Son cruciales para modificar el orden de ejecución del programa. Permiten la creación de bucles, condicionales y subrutinas.
+		\begin{itemize}
+			\item \texttt{JMP}: Salto incondicional a una dirección de memoria específica.
+			\item \texttt{CALL}: Llama a una subrutina y guarda la dirección de retorno.
+			\item \texttt{RET}: Retorna de una subrutina al punto de llamada.
+		\end{itemize}
+		\item \textbf{Instrucciones de manipulación de bits:} Permiten el control granular de bits individuales, lo cual es fundamental para interactuar con los pines de E/S y configurar periféricos.
+		\begin{itemize}
+			\item \texttt{SETB}: Establece un bit en 1.
+			\item \texttt{CLRB}: Borra un bit, poniéndolo en 0.
+		\end{itemize}
+	\end{itemize}
+	
+	\subsubsection{Proceso de Codificación}
+	El proceso de codificación de instrucciones es la serie de pasos que transforma el código fuente legible por humanos en el código binario ejecutable por el microcontrolador. Este flujo de trabajo se automatiza en gran medida por herramientas de desarrollo, como el IDE de Arduino. Los pasos principales son:
+	
+	\begin{enumerate}
+		\item \textbf{Código Fuente:} El programador escribe el código en un lenguaje de alto nivel, como C++ para el ESP32. El código está lleno de lógica, funciones y librerías que simplifican el desarrollo.
+		\item \textbf{Compilación:} El \textbf{compilador} (por ejemplo, `g++` para el ESP32) lee el código fuente en C++ y lo traduce a un archivo de lenguaje de ensamblador, que es un lenguaje de bajo nivel con instrucciones como \texttt{MOV} y \texttt{ADD}.
+		\item \textbf{Ensamblaje:} El \textbf{ensamblador} toma el archivo de ensamblador y lo convierte en código objeto binario, que es un archivo que contiene las instrucciones en su forma binaria.
+		\item \textbf{Vinculación (Linker):} El \textbf{enlazador} combina todos los archivos de código objeto, junto con las librerías necesarias (por ejemplo, las librerías para Wi-Fi o para el sensor de temperatura), en un único archivo ejecutable. Este archivo final es el \textit{firmware} que se cargará en el microcontrolador.
+		\item \textbf{Carga (Flasheo):} Finalmente, el cargador de arranque del microcontrolador (bootloader) se encarga de transferir y escribir el archivo ejecutable en la memoria Flash del ESP32, donde residirá de manera permanente y se ejecutará al encender el dispositivo.
+	\end{enumerate}
+	
+	
+	\subsection{Programación de microcontroladores}
+	La programación de microcontroladores consiste en el arte y la técnica de escribir código que interactúe con el hardware físico para controlar el comportamiento del dispositivo. Para lograr esto, es fundamental comprender cómo el microcontrolador gestiona y procesa las señales del mundo real a través de sus interfaces.
+	
+	\subsubsection{Interfaces y Señales}
+	Para interactuar con el entorno físico, un microcontrolador debe ser capaz de manejar dos tipos de señales:
+	
+	\begin{itemize}
+		\item \textbf{Señal Analógica:} Una señal continua en el tiempo que puede tomar cualquier valor dentro de un rango determinado. Por ejemplo, la temperatura ambiente o la medición del pH son variables físicas que se representan con señales analógicas.
+		\item \textbf{Señal Digital:} Una señal discreta que solo puede tener un número limitado de estados, típicamente dos: \textit{Alto} (representado por 1) y \textit{Bajo} (representado por 0). Un interruptor encendido o apagado es un ejemplo de señal digital.
+	\end{itemize}
+	
+	Los \textbf{sistemas digitales} se caracterizan por su precisión y resistencia al ruido, ya que operan con estados definidos (1 y 0). En contraste, los \textbf{sistemas analógicos} se utilizan para capturar la variabilidad del mundo real, pero pueden ser más susceptibles a la distorsión. La mayoría de los microcontroladores modernos, como el ESP32, están diseñados para operar de manera digital, por lo que utilizan convertidores para interpretar datos analógicos.
+	
+	\subsubsection{Interfaces de Microcontroladores}
+	Una \textbf{interfaz de microcontroladores} es el conjunto de componentes de hardware y software que facilitan la comunicación y la transferencia de datos entre el microcontrolador y los periféricos externos. Sus características y tipos principales son:
+	
+	\begin{itemize}
+		\item \textbf{GPIO (General-Purpose Input/Output):} Son los pines más versátiles del microcontrolador. Pueden ser configurados por software como entradas o salidas digitales, permitiendo la lectura de botones o el encendido de LEDs.
+		\item \textbf{ADC (Convertidor Analógico-Digital):} Es una interfaz especializada que convierte señales analógicas (como las del sensor de pH) en valores digitales que el microcontrolador puede procesar. La resolución del ADC (en bits) determina la precisión de la conversión.
+		\item \textbf{PWM (Modulación por Ancho de Pulso):} Genera señales digitales que simulan un comportamiento analógico, útil para controlar la intensidad de un LED o la velocidad de un motor.
+		\item \textbf{Interfaces de Comunicación Serial:} Son protocolos de comunicación que permiten a los dispositivos intercambiar datos bit a bit. En el proyecto HYDRAWARE, se utilizan:
+		\begin{itemize}
+			\item \textit{One-Wire:} Protocolo bidireccional que utiliza un solo pin de datos para la comunicación. El sensor de temperatura DS18B20 emplea este protocolo.
+			\item \textit{I2C (Inter-Integrated Circuit):} Protocolo serial de dos hilos (datos y reloj) que permite a múltiples dispositivos comunicarse con el microcontrolador. El display LCD 2x16 se conecta a través de I2C, lo que minimiza la cantidad de pines utilizados.
+		\end{itemize}
+	\end{itemize}
+	
+	\subsubsection{Periféricos de Entrada y Salida}
+	Los periféricos son los dispositivos externos que interactúan con el microcontrolador. Se dividen en dos categorías:
+	
+	\begin{itemize}
+		\item \textbf{Periféricos de Entrada:} Dispositivos que proporcionan datos al microcontrolador para su procesamiento.
+		\begin{itemize}
+			\item \textbf{Sensor de Temperatura Digital DS18B20:} Este sensor de entrada digital utiliza el protocolo \textit{One-Wire} para enviar lecturas de temperatura precisas. Es crucial para monitorear la salud de los peces en el proyecto HYDRAWARE.
+			\item \textbf{Sensor de pH PH-4502C:} Es un sensor de entrada analógico. Mide el nivel de acidez o alcalinidad del agua y envía una señal analógica al ESP32 para que sea convertida a un valor digital a través del ADC.
+		\end{itemize}
+		\item \textbf{Periféricos de Salida:} Dispositivos que reciben señales del microcontrolador para ejecutar una acción o mostrar información.
+		\begin{itemize}
+			\item \textbf{Display LCD 2x16:} Este es un periférico de salida digital que recibe datos del microcontrolador a través de una interfaz I2C. Su función en HYDRAWARE es mostrar de manera local y en tiempo real las mediciones de temperatura y pH.
+		\end{itemize}
+	\end{itemize}
+	
+	\subsubsection{Proceso de Conexión y Programación}
+	El proceso de implementación se divide en dos fases principales: la conexión física (hardware) y el desarrollo lógico (software).
+	
+	\paragraph{Proceso de Conexión:}
+	La conexión de los periféricos al ESP32 debe seguir una cuidadosa planificación:
+	\begin{enumerate}
+		\item \textbf{Identificación de Pines:} Se deben consultar las hojas de datos de todos los componentes para identificar los pines de alimentación (\textit{VCC}), tierra (\textit{GND}) y de datos.
+		\item \textbf{Conexión del Sensor DS18B20:} El pin de datos del sensor se conecta a un pin GPIO del ESP32. Se requiere una resistencia \textit{pull-up} (generalmente de $4.7\text{k}\Omega$) entre el pin de datos y la alimentación para asegurar una comunicación estable del bus \textit{One-Wire}.
+		\item \textbf{Conexión del Sensor de pH:} El módulo del sensor de pH se conecta a una fuente de alimentación de 5V y su pin de salida analógica se conecta a uno de los pines ADC del ESP32 para realizar la lectura.
+		\item \textbf{Conexión del Display LCD:} El display LCD I2C se conecta a los pines de comunicación I2C del ESP32, que suelen ser GPIO 21 (SDA) y GPIO 22 (SCL).
+	\end{enumerate}
+	
+	\paragraph{Proceso de Programación:}
+	Una vez que el hardware está conectado, el microcontrolador necesita ser programado para realizar su función.
+	\begin{enumerate}
+		\item \textbf{Desarrollo del Firmware:} El código (firmware) se escribe en un entorno como el IDE de Arduino o PlatformIO, utilizando C++. Se incluyen librerías específicas para cada periférico (por ejemplo, `OneWire.h` y `DallasTemperature.h` para el sensor DS18B20, o librerías para la comunicación I2C del LCD).
+		\item \textbf{Lógica del Programa:} El código debe incluir la lógica para inicializar las interfaces, leer los datos de los sensores, procesar los valores (por ejemplo, calibrar la lectura del pH), mostrar la información en el LCD, y establecer la comunicación inalámbrica (Wi-Fi) para enviar los datos a la aplicación móvil.
+		\item \textbf{Carga al Microcontrolador:} El código compilado se transfiere a la memoria Flash del ESP32 a través de una conexión USB. Al reiniciar el dispositivo, el programa se ejecuta automáticamente, iniciando el proceso de monitoreo.
+	\end{enumerate}
+	
 	
 	\subsection{Sistemas embebidos}
 	\subsubsection{Definiciones}
@@ -171,7 +297,14 @@
 		\subsubsection{Características y Tipos}
 		\begin{itemize}
 			\item Explicar las características y tipos de sistemas embebidos, sensores y actuadores... Diagrama de bloques elemento fisico actuador, etc. Todo es el sistema embebido.
+			\begin{figure}[h]
+				\centering
+				\includegraphics[width=0.9\textwidth]{diagrama.png}
+				\caption{Diagrama de bloques del sistema de monitoreo HYDRAWARE}
+				\label{fig:diagrama_bloques}
+			\end{figure}
 		\end{itemize}
+		
 		\subsubsection{Plataformas de Sistemas Embebidos}
 		\begin{itemize}
 			\item Identificar las plataformas de sistemas embebidos.
@@ -263,7 +396,14 @@
 	
 	\subsection{Justificacion del Software Seleccionado}
 	\subsection{Diagrama}
-	\subsection{kit de arduino}
+	A continuación se presenta un diagrama de bloques del sistema HYDROWARE, el cual representa los componentes principales y sus interconexiones para lograr el monitoreo automatizado.
+	
+	\begin{figure}[h]
+		\centering
+		\includegraphics[width=0.9\textwidth]{diagrama.png}
+		\caption{Diagrama de bloques del sistema de monitoreo HYDRAWARE}
+		\label{fig:diagrama_bloques}
+	\end{figure}
 
 
 
