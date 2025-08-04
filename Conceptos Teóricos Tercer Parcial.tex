@@ -109,26 +109,26 @@
 	\end{itemize}
 	
 	\subsubsection{Proceso de Selección}
-	Para seleccionar un microcontrolador adecuado según la función del proyecto, se deben considerar varios factores:
+	
+	El microcontrolador ESP32-WROOM-32 cumple con los criterios de selección para HYDROWARE, los cuales son:
 	
 	\begin{itemize}
-		\item \textbf{Tipo de aplicación:} Complejidad del sistema y tareas a realizar.
-		\item \textbf{Cantidad y tipo de entradas/salidas necesarias:} Digitales, analógicas, PWM, etc.
-		\item \textbf{Memoria requerida:} Para almacenar código y datos.
-		\item \textbf{Velocidad y capacidad de procesamiento:} De acuerdo a la carga operativa.
-		\item \textbf{Interfaces de comunicación:} Protocolos necesarios para comunicación con otros dispositivos.
-		\item \textbf{Consumo de energía:} Especialmente importante en aplicaciones portátiles o alimentadas por batería.
-		\item \textbf{Disponibilidad de soporte técnico:} Documentación, comunidad y herramientas compatibles.
-		\item \textbf{Costo y disponibilidad:} Que se ajusten al presupuesto y se puedan obtener fácilmente.
+		\item \textbf{Tipo de aplicación:} El ESP32 es ideal para sistemas IoT (Internet de las Cosas) de monitoreo. Su capacidad para manejar múltiples sensores y la comunicación inalámbrica se adapta perfectamente a la complejidad del sistema HYDROWARE.
+		\item \textbf{Cantidad y tipo de entradas/salidas necesarias:} Cuenta con suficientes pines GPIO (General-Purpose Input/Output) para conectar el sensor de temperatura DS18B20, el sensor de pH y el display LCD 2x16. Además, maneja entradas y salidas digitales y analógicas necesarias.
+		\item \textbf{Memoria requerida:} El ESP32 dispone de memoria SRAM y Flash que son suficientes para el código del sistema, el registro de datos y la gestión de la aplicación móvil.
+		\item \textbf{Velocidad y capacidad de procesamiento:} Su procesador de doble núcleo (Dual-Core) ofrece la capacidad de procesamiento necesaria para leer datos de los sensores, procesar la información y gestionar la conectividad inalámbrica de manera simultánea y eficiente.
+		\item \textbf{Interfaces de comunicación:} La integración de Wi-Fi y Bluetooth es crucial para el proyecto. El Wi-Fi permite la comunicación con la aplicación móvil y la visualización de datos en tiempo real, mientras que el Bluetooth podría ser usado para la configuración inicial o comunicación a corta distancia.
+		\item \textbf{Consumo de energía:} El ESP32 ofrece modos de bajo consumo (Deep Sleep) que son beneficiosos para optimizar la duración de la batería.
+		\item \textbf{Disponibilidad de soporte técnico:} El ESP32 tiene una vasta comunidad de desarrolladores, documentación detallada, librerías y herramientas de programación (IDE de Arduino, PlatformIO), lo que facilita su desarrollo y depuración.
+		\item \textbf{Costo y disponibilidad:} Es un microcontrolador de bajo costo y fácil de conseguir en el mercado, lo que lo hace accesible para proyectos como HYDROWARE.
 	\end{itemize}
 	
-	Una selección cuidadosa asegura eficiencia, economía y funcionalidad óptima del sistema embebido final.
-	
+	El ESP32-WROOM-32 se alinea con todos los factores clave del proceso de selección, garantizando la eficiencia, funcionalidad y viabilidad del sistema de monitoreo automatizado HYDROWARE.
 	\vspace{0.5cm}
-	\noindent \textit{Referencias:} \\
-	Raúl A. Aquino Santos y Marien N. Rivera Gutiérrez, \textit{Microcontroladores. Fundamentos y aplicaciones}. \\
-	Microchip Technology, \textit{What is a Microcontroller?} \\
-	Texas Instruments, \textit{Selecting a Microcontroller}. 
+	%\noindent \textit{Referencias:} \\
+	%Raúl A. Aquino Santos y Marien N. Rivera Gutiérrez, \textit{Microcontroladores. Fundamentos y aplicaciones}. \\
+	%Microchip Technology, \textit{What is a Microcontroller?} \\
+	%Texas Instruments, \textit{Selecting a Microcontroller}. 
 	
 
 	
@@ -190,6 +190,81 @@
 			\item Explicar las aplicaciones de microcontroladores en la robótica, domótica e internet de las cosas y como se integra en el proyecto... 
 		\end{itemize}
 	\end{itemize}
+	
+	
+	\subsection{Descripción del proyecto a desarrollar}
+	Automatizar procesos que, si se realizan de la manera antigua, resultan bastante tardados, es fundamental para mejorar la eficiencia operativa. Lo que se tiene pensado es aumentar la productividad y disminuir el tiempo estimado para medir parámetros críticos como el pH y la temperatura del agua en los estanques de cultivo. Actualmente, estas mediciones se llevan a cabo de forma manual, lo que representa una pérdida de tiempo y un riesgo para la salud de los peces debido a la falta de registros continuos y alertas tempranas ante desviaciones.
+	
+	Por esta razón, se propone el desarrollo HYDRAWARE, un sistema automatizado de monitoreo mediante el uso de sensores conectados a un microcontrolador y una aplicación móvil. Este sistema permitirá registrar, visualizar en tiempo real y generar alertas cuando los niveles de los parámetros se encuentren fuera de los límites aceptables, ya sea por valores bajos o elevados. Con esta solución tecnológica se busca mejorar la toma de decisiones, reducir errores humanos, optimizar el manejo del agua y promover una acuicultura más eficiente, precisa y sustentable.
+	
+	\subsection{Materiales}
+	\begin{itemize}
+		\item Sensor de Temperatura Digital Ds18b20.
+		\item Adaptador para sensor Ds18b20
+		\item PH-4502C
+		\item Electrodo E201-BNC Tipo de sonda
+		\item Display LCD 2x16
+	\end{itemize}
+	
+	\subsection{Descripción de Arduino (ESP32-WROOM-32)}
+	El ESP32-WROOM-32 es un módulo de microcontrolador (MCU) con conectividad Wi-Fi, Bluetooth y Bluetooth LE. Está diseñado para una variedad de aplicaciones, desde redes de sensores de baja potencia hasta tareas más exigentes como la codificación de voz y la transmisión de música. El núcleo del módulo es el chip ESP32-D0WDQ6.
+	
+	\subsubsection{Características principales:}
+	\begin{itemize}
+		\item \textbf{Conectividad Inalámbrica:}
+		\begin{itemize}
+			\item Wi-Fi: 802.11 b/g/n, con un rango de frecuencia central de 2412 a 2484 MHz.
+			
+			\item Bluetooth: Especificación v4.2 BR/EDR y Bluetooth LE. El receptor NZIF tiene una sensibilidad de -97 dBm, y el transmisor es Clase-1, Clase-2 y Clase-3.
+		\end{itemize}
 		
+		\item \textbf{Interfaces del Módulo:}
+		\begin{itemize}
+			\item Soporta SD card, UART, SPI, SDIO, I2C, LED PWM, Motor PWM, I2S, IR, DAC, TWAI (compatible con CAN 2.0), sensor táctil capacitivo, ADC y contador de pulsos GPIO.
+		\end{itemize}
+		
+		\item \textbf{Hardware Integrado:}
+		\begin{itemize}
+			\item Cristal de 40 MHz y Flash SPI de 4 MB.
+		\end{itemize}
+		
+		\item \textbf{Condiciones de Operación:}
+		\begin{itemize}
+			\item Voltaje de operación: 3.0V 3.6V.
+			\item Rango de temperatura: -40C +85C.
+			\item Corriente de operación promedio: 80 mA.
+		\end{itemize}
+		\item \textbf{CPU y Memoria Interna:}
+		\begin{itemize}
+			\item Dos microprocesadores Xtensa® 32-bit LX6 de baja potencia.
+			
+			\item 520 KB de SRAM en chip, 448 KB de ROM para arranque y 16 KB de SRAM en RTC.
+			
+			
+		\end{itemize}
+	\end{itemize}
+	
+	\subsubsection{Elementos principales:}
+	\begin{itemize}
+		\item Módulo ESP32-WROOM-32.
+		
+		\item Chip ESP32-D0WDQ6.
+		
+		\item Conectividad Wi-Fi y Bluetooth/Bluetooth LE.
+		
+		\item Flash SPI de 4 MB y cristal oscilador de 40 MHz.
+		
+		\item Pines GPIO, con los GPIO6 a GPIO11 conectados a la flash SPI y no recomendados para otros usos.
+		
+		
+	\end{itemize}
+	
+	\subsection{Software utilizado para la interfaz Usuario - Arduino}
+	
+	\subsection{Justificacion del Software Seleccionado}
+	\subsection{Diagrama}
+	\subsection{kit de arduino}
+
+
 
 \end{document}
