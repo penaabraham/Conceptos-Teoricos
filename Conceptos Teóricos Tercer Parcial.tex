@@ -292,37 +292,125 @@
 	\subsection{Sistemas embebidos}
 	\subsubsection{Definiciones}
 	\begin{itemize}
-		\item Definir los conceptos de sistema embebido, sensor y actuador.
-		
-		\subsubsection{Características y Tipos}
+		\item \textbf{Sistema embebido:} Es un sistema informático especializado, diseñado para realizar una o varias funciones específicas dentro de un sistema más grande. A diferencia de una computadora de uso general, un sistema embebido se centra en la eficiencia, el bajo costo y el bajo consumo de energía. El sistema HYDRAWARE, al estar dedicado al monitoreo de agua, es un claro ejemplo de un sistema embebido.
+		\item \textbf{Sensor:} Es un dispositivo que detecta y responde a un tipo de energía o señal física (como calor, luz, sonido, presión) y la convierte en una señal eléctrica o digital que el microcontrolador puede interpretar.
+		\item \textbf{Actuador:} Es un dispositivo que convierte una señal de control (eléctrica o digital) del microcontrolador en un movimiento físico o una acción, como abrir una válvula, encender un motor o una bomba.
+	\end{itemize}
+
+	\subsubsection{Características y Tipos}
+	Los sistemas embebidos se caracterizan por ser de propósito fijo, funcionar en tiempo real, ser de bajo consumo y compactos.
+	\begin{figure}[h]
+		\centering
+		\includegraphics[width=0.9\textwidth]{diagrama.png}
+		\caption{Diagrama de bloques de un sistema embebido}
+	\end{figure}
+	\begin{itemize}
+		\item \textbf{Sistemas Embebidos:}
 		\begin{itemize}
-			\item Explicar las características y tipos de sistemas embebidos, sensores y actuadores... Diagrama de bloques elemento fisico actuador, etc. Todo es el sistema embebido.
-			\begin{figure}[h]
-				\centering
-				\includegraphics[width=0.9\textwidth]{diagrama.png}
-				\caption{Diagrama de bloques del sistema de monitoreo HYDRAWARE}
-				\label{fig:diagrama_bloques}
-			\end{figure}
+			\item \textit{En tiempo real:} Responden a eventos en un plazo de tiempo predecible. HYDRAWARE requiere esto para las alertas inmediatas.
+			\item \textit{Autónomos:} Funcionan sin intervención humana continua.
+			\item \textit{Tipos:} De red (como HYDRAWARE), móviles, o en tiempo real.
 		\end{itemize}
-		
-		\subsubsection{Plataformas de Sistemas Embebidos}
+		\item \textbf{Sensores y Actuadores:}
 		\begin{itemize}
-			\item Identificar las plataformas de sistemas embebidos.
-		\end{itemize}
-		\subsubsection{Proceso de Selección de Plataformas}
-		\begin{itemize}
-			\item Explicar el proceso de selección de plataformas de sistemas embebidos de acuerdo a la función del proyecto.... Por que eliguieron una pagina web a una app movil.
-		\end{itemize}
-		\subsubsection{Proceso de Diseño y Construcción}
-		\begin{itemize}
-			\item Explicar el proceso de diseño de sistemas embebidos.
-			\item Explicar el proceso de construcción de sistemas embebidos.
-		\end{itemize}
-		\subsubsection{Aplicaciones}
-		\begin{itemize}
-			\item Explicar las aplicaciones de microcontroladores en la robótica, domótica e internet de las cosas y como se integra en el proyecto... 
+			\item \textit{Sensores:} \textbf{Analógicos} (PH-4502C) y \textbf{digitales} (DS18B20).
+			\item \textit{Actuadores:} Aunque HYDRAWARE inicialmente es solo un sistema de monitoreo, podría expandirse con actuadores como una bomba para regular el pH.
 		\end{itemize}
 	\end{itemize}
+		
+	\subsubsection{Plataformas de Sistemas Embebidos}
+	Una \textbf{plataforma de sistemas embebidos} es un ecosistema completo que proporciona el hardware, el software y las herramientas necesarias para diseñar y programar un sistema embebido. Estas plataformas simplifican el proceso de desarrollo al ofrecer un microcontrolador o microprocesador preensamblado en una placa de circuito, junto con un entorno de desarrollo integrado (IDE) y librerías de software. Identificar la plataforma adecuada es una decisión crítica que depende de los requisitos del proyecto.
+	
+	Existen diversas plataformas populares, cada una con sus propias características y casos de uso ideales:
+	
+	\begin{itemize}
+		\item \textbf{Arduino:} Es una plataforma de código abierto ampliamente conocida por su facilidad de uso, lo que la hace ideal para principiantes y proyectos educativos. Sus microcontroladores (como el ATmega328P) son de 8 bits y son perfectos para tareas sencillas y de bajo consumo que no requieren conectividad a internet.
+		
+		\item \textbf{Raspberry Pi:} A diferencia de un microcontrolador, la Raspberry Pi es una computadora de placa única (SBC) que ejecuta un sistema operativo completo (como Linux). Ofrece una potencia de procesamiento significativamente mayor, puertos USB, salida HDMI y capacidades de red. Es la elección perfecta para proyectos complejos que requieren procesamiento de datos intensivo, servidores web o interfaces gráficas.
+		
+		\item \textbf{ESP32:} El microcontrolador \textbf{ESP32-WROOM-32}, la plataforma seleccionada para el proyecto HYDRAWARE, se sitúa como un puente entre la simplicidad de Arduino y la potencia de la Raspberry Pi en términos de conectividad. Su principal ventaja es la integración de \textbf{Wi-Fi y Bluetooth} en un solo chip de bajo costo y bajo consumo. Esto lo hace óptimo para proyectos de \textbf{Internet de las Cosas (IoT)} y sistemas de monitoreo remoto, donde la comunicación inalámbrica es un requisito fundamental.
+	\end{itemize}
+	
+	El ESP32 fue la elección más coherente para HYDRAWARE, ya que su arquitectura de doble núcleo proporciona la capacidad de procesamiento necesaria para manejar múltiples sensores y la comunicación inalámbrica simultáneamente, mientras que su consumo de energía es mucho más eficiente que el de una Raspberry Pi, lo que lo hace más adecuado para un dispositivo de monitoreo autónomo.
+	
+	\subsubsection{Proceso de Selección de Plataformas}
+	La selección de la plataforma de un sistema embebido es una fase crucial en el diseño del proyecto, ya que impacta directamente en la funcionalidad, el rendimiento, el costo y la viabilidad a largo plazo. Este proceso debe estar guiado por un análisis exhaustivo de los requisitos específicos del proyecto y las características de las plataformas disponibles. Para HYDRAWARE, la decisión se basó en los siguientes criterios clave:
+	
+	\begin{itemize}
+		\item \textbf{Funcionalidad Requerida:} El objetivo principal de HYDRAWARE es el monitoreo continuo de parámetros de agua (temperatura y pH) y la capacidad de generar alertas en tiempo real. Esto exige una plataforma que pueda interactuar con sensores analógicos y digitales, procesar datos y, fundamentalmente, comunicarse de forma inalámbrica.
+		
+		\item \textbf{Conectividad Inalámbrica:} Dado que HYDRAWARE es un sistema de monitoreo remoto, la conectividad es primordial. El \textbf{ESP32-WROOM-32} fue la elección obvia debido a su integración nativa de \textbf{Wi-Fi} y \textbf{Bluetooth}. Esto elimina la necesidad de módulos externos complejos y reduce el costo y la complejidad del hardware, a diferencia de otras plataformas que requerirían adaptadores adicionales.
+		
+		\item \textbf{Capacidad de Procesamiento y Memoria:} Aunque el monitoreo de temperatura y pH no es una tarea computacionalmente intensiva, la gestión de la conectividad Wi-Fi y el envío de datos a la nube requieren una capacidad de procesamiento adecuada. El procesador de doble núcleo del ESP32 y su memoria suficiente para el firmware y el almacenamiento temporal de datos lo hacen ideal para esta tarea sin ser excesivo ni insuficiente.
+		
+		\item \textbf{Consumo de Energía:} Para un sistema de monitoreo que podría operar con baterías en el futuro, el bajo consumo de energía es una ventaja significativa. El ESP32 ofrece modos de bajo consumo (como el \textit{Deep Sleep}) que permiten optimizar la duración de la batería, un factor que es menos crítico en plataformas como Raspberry Pi, diseñadas para un consumo más elevado.
+		
+		\item \textbf{Costo y Disponibilidad:} El ESP32 es un microcontrolador muy accesible en el mercado, lo que lo hace viable para proyectos con presupuestos limitados. Su amplia disponibilidad también asegura un suministro constante de componentes.
+		
+		\item \textbf{Soporte y Comunidad:} La vasta comunidad de desarrolladores de ESP32, junto con la extensa documentación, librerías y herramientas (IDE de Arduino, PlatformIO), facilita enormemente el desarrollo, la depuración y la resolución de problemas.
+	\end{itemize}
+	
+	\paragraph{Justificación de la Interfaz de Usuario (Aplicación Móvil vs. Página Web):}
+	La elección de una \textbf{aplicación móvil} como interfaz de usuario principal para HYDRAWARE, en lugar de una página web, se justifica por las siguientes ventajas clave que se alinean con los objetivos del proyecto:
+	
+	\begin{itemize}
+		\item \textbf{Portabilidad y Acceso Constante:} Un smartphone es un dispositivo que el usuario lleva consigo en todo momento. Una aplicación móvil proporciona acceso inmediato a los datos del estanque desde cualquier lugar con conexión a internet, sin la necesidad de abrir un navegador web. Esto es crucial para la supervisión en tiempo real de un sistema de acuicultura.
+		
+		\item \textbf{Alertas en Tiempo Real (Notificaciones Push):} La funcionalidad más crítica de HYDRAWARE es la capacidad de alertar al usuario cuando los parámetros del agua están fuera de los rangos seguros. Las aplicaciones móviles permiten el uso de \textbf{notificaciones push}, que son mensajes instantáneos que aparecen en la pantalla del dispositivo, incluso si la aplicación no está abierta. Una página web, por sí sola, no puede ofrecer este nivel de inmediatez y fiabilidad en las alertas.
+		
+		\item \textbf{Experiencia de Usuario Optimizada:} Las aplicaciones móviles pueden diseñarse para ofrecer una interfaz de usuario más fluida, intuitiva y optimizada para la interacción táctil. Esto permite una visualización de datos más clara, gráficos interactivos y una navegación más sencilla, mejorando la experiencia general del usuario.
+		
+		\item \textbf{Funcionalidad Offline (Parcial):} Aunque el monitoreo principal es en tiempo real y requiere conexión, una aplicación móvil puede almacenar datos localmente y permitir la visualización de historiales o configuraciones incluso sin una conexión activa a internet, lo cual no es tan sencillo de implementar en una interfaz web básica.
+	\end{itemize}
+	
+	La combinación del ESP32 como microcontrolador y una aplicación móvil como interfaz de usuario garantiza que HYDRAWARE sea un sistema de monitoreo eficiente, confiable, portátil y capaz de proporcionar alertas críticas de manera instantánea, lo cual es fundamental para la salud de los peces y la productividad en la acuicultura.
+	
+	\subsubsection{Proceso de Diseño y Construcción}
+	El desarrollo de un sistema embebido como HYDRAWARE, a veces se realizado con un enfoque ágil y comunicativo, sigue un proceso estructurado que asegura la funcionalidad y fiabilidad del producto final. Este proceso se puede dividir en fases clave que van desde la conceptualización hasta la implementación y las pruebas.
+	
+	\paragraph{Proceso de Diseño de Sistemas Embebidos:}
+	El diseño es la fase conceptual donde se definen las características y el comportamiento del sistema.
+	\begin{enumerate}
+		\item \textbf{Definición de Requisitos:} Se establecen claramente los objetivos del sistema. Para HYDRAWARE, esto incluyó la necesidad de monitorear temperatura y pH, generar alertas, y permitir la visualización remota de datos. Se definieron los rangos operativos seguros para cada parámetro.
+		\item \textbf{Selección de Hardware:} Basándose en los requisitos, se eligen los componentes físicos. Esto implicó la selección del microcontrolador (ESP32 por su conectividad Wi-Fi), los sensores específicos (DS18B20 para temperatura, PH-4502C para pH) y los periféricos de salida (Display LCD 2x16).
+		\item \textbf{Diseño de Arquitectura del Sistema:} Se define cómo interactuarán los componentes. Esto incluye la asignación de pines del microcontrolador, la elección de los protocolos de comunicación (One-Wire para DS18B20, I2C para LCD, Wi-Fi para la nube) y la estructura general del sistema (sensores $\rightarrow$ microcontrolador $\rightarrow$ nube $\rightarrow$ aplicación móvil).
+		\item \textbf{Diseño de Interfaces de Usuario (UI/UX):} Aunque no se documentó un diagrama de flujo formal, se conceptualizó la experiencia del usuario para la aplicación móvil. Esto incluyó el diseño de pantallas para la visualización de datos en tiempo real, el historial de mediciones, la configuración de alertas y la interfaz para la calibración de sensores. Se priorizó la claridad y la facilidad de uso.
+		\item \textbf{Diseño de Software (Firmware y Aplicación):} Se planificó la lógica del programa para el ESP32 (lectura de sensores, procesamiento, envío de datos) y la estructura de la aplicación móvil (recepción de datos, visualización, notificaciones).
+	\end{enumerate}
+	
+	\paragraph{Proceso de Construcción de Sistemas Embebidos:}
+	La construcción es la fase de implementación física y lógica del diseño.
+	\begin{enumerate}
+		\item \textbf{Ensamblaje del Hardware (Prototipado):} Los componentes seleccionados se conectaron físicamente. Inicialmente, esto se realizó en un protoboard para pruebas y validación de las conexiones eléctricas y la compatibilidad de los componentes.
+		\item \textbf{Desarrollo del Firmware:} Se escribió el código en C++ para el ESP32 utilizando el IDE de Arduino. Esto incluyó la implementación de las librerías necesarias para los sensores y el LCD, así como la lógica para la lectura de datos, el procesamiento, la gestión de la conectividad Wi-Fi y el envío de datos a un servidor en la nube.
+		\item \textbf{Desarrollo de la Aplicación Móvil:} Se programó la aplicación móvil (utilizando el framework o lenguaje de programación elegido) para conectarse al servidor en la nube, recibir los datos del ESP32, mostrarlos en la interfaz de usuario y gestionar las notificaciones push para las alertas.
+		\item \textbf{Integración y Pruebas Unitarias:} Cada componente y módulo de software se probó individualmente (por ejemplo, se verificó que el sensor de temperatura leía correctamente, que el LCD mostraba mensajes, que el ESP32 se conectaba a Wi-Fi).
+		\item \textbf{Pruebas de Integración y Sistema:} Una vez que los módulos funcionaban individualmente, se integraron para probar el sistema completo: desde la lectura de los sensores, el envío de datos a la nube, hasta la visualización en la aplicación móvil y la recepción de alertas. Se realizaron pruebas en condiciones reales para asegurar la precisión y fiabilidad.
+		\item \textbf{Calibración y Ajustes Finales:} Se realizaron calibraciones específicas para los sensores (especialmente el de pH) y se ajustaron los umbrales de alerta. Se optimizó el código para el rendimiento y el consumo de energía.
+	\end{enumerate}
+	Este proceso nos permitió la evolución y refinamiento de HYDRAWARE, asegurando que el sistema cumpliera con sus objetivos de monitoreo y automatización.
+	
+	\subsubsection{Aplicaciones}
+	Los microcontroladores son la columna vertebral de la tecnología moderna, actuando como el 'cerebro' detrás de una vasta gama de dispositivos que nos rodean. Su capacidad para realizar tareas específicas de manera eficiente y autónoma los hace indispensables en múltiples campos, incluyendo la robótica, la domótica y el Internet de las Cosas (IoT).
+	
+	\begin{itemize}
+		\item \textbf{Robótica:} En la robótica, los microcontroladores son responsables de controlar el movimiento, procesar la información de sensores y tomar decisiones en tiempo real. Un microcontrolador puede gestionar la velocidad y dirección de los motores, leer datos de sensores de proximidad o de visión y ejecutar rutinas programadas para que el robot navegue por un entorno o realice una tarea compleja.
+		
+		\item \textbf{Domótica:} La domótica se refiere a la automatización de la vivienda. Los microcontroladores se utilizan para crear dispositivos inteligentes que controlan la iluminación, la climatización, los sistemas de seguridad, los electrodomésticos y el entretenimiento. Un microcontrolador puede activar una alarma al detectar movimiento, ajustar la temperatura de un termostato o encender las luces de una habitación de forma remota, mejorando el confort y la eficiencia energética del hogar.
+		
+		\item \textbf{Internet de las Cosas (IoT):} El IoT es una red de dispositivos físicos ("cosas") que están integrados con sensores, software y otras tecnologías para conectarse e intercambiar datos con otros dispositivos y sistemas a través de internet. Los microcontroladores son el componente fundamental de la mayoría de los dispositivos IoT, ya que son los encargados de recolectar datos del entorno (usando sensores), procesarlos y, gracias a su conectividad inalámbrica, enviarlos a la nube o a otros dispositivos.
+	\end{itemize}
+	
+	\paragraph{Integración en HYDRAWARE}
+	Este proyecto es un ejemplo práctico y directo de una aplicación de microcontroladores en el ámbito del \textbf{Internet de las Cosas}. Se integra en este concepto de la siguiente manera:
+	\begin{itemize}
+		\item \textbf{Microcontrolador como Cerebro del IoT:} El \textbf{ESP32-WROOM-32} es el corazón del sistema, actuando como un nodo de IoT. Su función principal es recopilar datos de los sensores de temperatura y pH, que son las 'cosas' que se están midiendo.
+		\item \textbf{Recolección de Datos:} Los sensores (periféricos de entrada) miden las variables físicas del entorno acuático y convierten la información en señales eléctricas que el ESP32 puede leer.
+		\item \textbf{Conectividad Inalámbrica:} La capacidad de \textbf{Wi-Fi} integrada en el ESP32 es la tecnología clave que permite al sistema subir los datos a un servidor en la nube. Esto lo convierte en un dispositivo conectado a internet.
+		\item \textbf{Monitoreo Remoto y Automatización:} Al enviar los datos a la nube, el sistema permite que el usuario acceda a la información en tiempo real a través de una aplicación móvil, sin importar su ubicación. De esta manera, HYDRAWARE transforma un proceso manual y propenso a errores en un sistema de monitoreo automatizado y eficiente, lo cual es el objetivo principal de las aplicaciones de IoT en la industria.
+	\end{itemize}
+	
+
 	
 	
 	\subsection{Descripción del proyecto a desarrollar}
@@ -395,16 +483,7 @@
 	\subsection{Software utilizado para la interfaz Usuario - Arduino}
 	
 	\subsection{Justificacion del Software Seleccionado}
-	\subsection{Diagrama}
-	A continuación se presenta un diagrama de bloques del sistema HYDROWARE, el cual representa los componentes principales y sus interconexiones para lograr el monitoreo automatizado.
 	
-	\begin{figure}[h]
-		\centering
-		\includegraphics[width=0.9\textwidth]{diagrama.png}
-		\caption{Diagrama de bloques del sistema de monitoreo HYDRAWARE}
-		\label{fig:diagrama_bloques}
-	\end{figure}
-
 
 
 \end{document}
