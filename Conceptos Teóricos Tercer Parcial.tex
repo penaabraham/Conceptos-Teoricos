@@ -112,27 +112,27 @@
 	
 	\subsubsection{Proceso de Selección}
 	
-	El microcontrolador ESP32-WROOM-32 cumple con los criterios de selección para HYDROWARE, los cuales son:
+	El microcontrolador ESP32-WROOM-32 cumple con los criterios de selección para HYDRAWARE, los cuales son:
 	
 	\begin{itemize}
-		\item \textbf{Tipo de aplicación:} El ESP32 es ideal para sistemas IoT (Internet de las Cosas) de monitoreo. Su capacidad para manejar múltiples sensores y la comunicación inalámbrica se adapta perfectamente a la complejidad del sistema HYDROWARE.
-		\item \textbf{Cantidad y tipo de entradas/salidas necesarias:} Cuenta con suficientes pines GPIO (General-Purpose Input/Output) para conectar el sensor de temperatura DS18B20, el sensor de pH y el display LCD 2x16. Además, maneja entradas y salidas digitales y analógicas necesarias.
+		\item \textbf{Tipo de aplicación:} El ESP32 es ideal para sistemas IoT (Internet de las Cosas) de monitoreo. Su capacidad para manejar múltiples sensores y la comunicación inalámbrica se adapta perfectamente a la complejidad del sistema HYDRAWARE.
+		\item \textbf{Cantidad y tipo de entradas/salidas necesarias:} Cuenta con suficientes pines GPIO (General-Purpose Input/Output) para conectar el sensor de temperatura DS18B20, el sensor de pH y el Display LCD TFT. Además, maneja entradas y salidas digitales y analógicas necesarias.
 		\item \textbf{Memoria requerida:} El ESP32 dispone de memoria SRAM y Flash que son suficientes para el código del sistema, el registro de datos y la gestión de la aplicación móvil.
 		\item \textbf{Velocidad y capacidad de procesamiento:} Su procesador de doble núcleo (Dual-Core) ofrece la capacidad de procesamiento necesaria para leer datos de los sensores, procesar la información y gestionar la conectividad inalámbrica de manera simultánea y eficiente.
 		\item \textbf{Interfaces de comunicación:} La integración de Wi-Fi y Bluetooth es crucial para el proyecto. El Wi-Fi permite la comunicación con la aplicación móvil y la visualización de datos en tiempo real, mientras que el Bluetooth podría ser usado para la configuración inicial o comunicación a corta distancia.
 		\item \textbf{Consumo de energía:} El ESP32 ofrece modos de bajo consumo (Deep Sleep) que son beneficiosos para optimizar la duración de la batería.
 		\item \textbf{Disponibilidad de soporte técnico:} El ESP32 tiene una vasta comunidad de desarrolladores, documentación detallada, librerías y herramientas de programación (IDE de Arduino, PlatformIO), lo que facilita su desarrollo y depuración.
-		\item \textbf{Costo y disponibilidad:} Es un microcontrolador de bajo costo y fácil de conseguir en el mercado, lo que lo hace accesible para proyectos como HYDROWARE.
+		\item \textbf{Costo y disponibilidad:} Es un microcontrolador de bajo costo y fácil de conseguir en el mercado, lo que lo hace accesible para proyectos como HYDRAWARE.
 	\end{itemize}
 	
-	El ESP32-WROOM-32 se alinea con todos los factores clave del proceso de selección, garantizando la eficiencia, funcionalidad y viabilidad del sistema de monitoreo automatizado HYDROWARE.
+	El ESP32-WROOM-32 se alinea con todos los factores clave del proceso de selección, garantizando la eficiencia, funcionalidad y viabilidad del sistema de monitoreo automatizado HYDRAWARE.
 	\vspace{0.5cm}
 	%\noindent \textit{Referencias:} \\
 	%Raúl A. Aquino Santos y Marien N. Rivera Gutiérrez, \textit{Microcontroladores. Fundamentos y aplicaciones}. \\
 	%Microchip Technology, \textit{What is a Microcontroller?} \\
 	%Texas Instruments, \textit{Selecting a Microcontroller}. 
 	
-
+	
 	
 	\subsection{Instrucciones de microcontroladores}
 	Las instrucciones de microcontroladores son el lenguaje de máquina que el procesador entiende directamente. Aunque el lenguaje de programación de alto nivel como C++ se utiliza para el desarrollo, este es compilado a un lenguaje de ensamblador y luego a código de máquina para ser ejecutado por el microcontrolador.
@@ -240,7 +240,7 @@
 		\item \textbf{Interfaces de Comunicación Serial:} Son protocolos de comunicación que permiten a los dispositivos intercambiar datos bit a bit. En el proyecto HYDRAWARE, se utilizan:
 		\begin{itemize}
 			\item \textit{One-Wire:} Protocolo bidireccional que utiliza un solo pin de datos para la comunicación. El sensor de temperatura DS18B20 emplea este protocolo.
-			\item \textit{I2C (Inter-Integrated Circuit):} Protocolo serial de dos hilos (datos y reloj) que permite a múltiples dispositivos comunicarse con el microcontrolador. El display LCD 2x16 se conecta a través de I2C, lo que minimiza la cantidad de pines utilizados.
+			\item \textit{I2C (Inter-Integrated Circuit):} Protocolo serial de dos hilos (datos y reloj) que permite a múltiples dispositivos comunicarse con el microcontrolador. El Display LCD TFT se conecta a través de I2C, lo que minimiza la cantidad de pines utilizados.
 		\end{itemize}
 	\end{itemize}
 	
@@ -289,7 +289,7 @@
 		\item \textbf{Sensor:} Es un dispositivo que detecta y responde a un tipo de energía o señal física (como calor, luz, sonido, presión) y la convierte en una señal eléctrica o digital que el microcontrolador puede interpretar.
 		\item \textbf{Actuador:} Es un dispositivo que convierte una señal de control (eléctrica o digital) del microcontrolador en un movimiento físico o una acción, como abrir una válvula, encender un motor o una bomba.
 	\end{itemize}
-
+	
 	\subsubsection{Características y Tipos}
 	Los sistemas embebidos se caracterizan por ser de propósito fijo, funcionar en tiempo real, ser de bajo consumo y compactos.
 	\begin{figure}[h]
@@ -310,7 +310,7 @@
 			\item \textit{Actuadores:} Aunque HYDRAWARE inicialmente es solo un sistema de monitoreo, podría expandirse con actuadores como una bomba para regular el pH.
 		\end{itemize}
 	\end{itemize}
-		
+	
 	\subsubsection{Plataformas de Sistemas Embebidos}
 	Una \textbf{plataforma de sistemas embebidos} es un ecosistema completo que proporciona el hardware, el software y las herramientas necesarias para diseñar y programar un sistema embebido. Estas plataformas simplifican el proceso de desarrollo al ofrecer un microcontrolador o microprocesador preensamblado en una placa de circuito, junto con un entorno de desarrollo integrado (IDE) y librerías de software. Identificar la plataforma adecuada es una decisión crítica que depende de los requisitos del proyecto.
 	
@@ -365,7 +365,7 @@
 	El diseño es la fase conceptual donde se definen las características y el comportamiento del sistema.
 	\begin{enumerate}
 		\item \textbf{Definición de Requisitos:} Se establecen claramente los objetivos del sistema. Para HYDRAWARE, esto incluyó la necesidad de monitorear temperatura y pH, generar alertas, y permitir la visualización remota de datos. Se definieron los rangos operativos seguros para cada parámetro.
-		\item \textbf{Selección de Hardware:} Basándose en los requisitos, se eligen los componentes físicos. Esto implicó la selección del microcontrolador (ESP32 por su conectividad Wi-Fi), los sensores específicos (DS18B20 para temperatura, PH-4502C para pH) y los periféricos de salida (Display LCD 2x16).
+		\item \textbf{Selección de Hardware:} Basándose en los requisitos, se eligen los componentes físicos. Esto implicó la selección del microcontrolador (ESP32 por su conectividad Wi-Fi), los sensores específicos (DS18B20 para temperatura, PH-4502C para pH) y los periféricos de salida (Display LCD TFT).
 		\item \textbf{Diseño de Arquitectura del Sistema:} Se define cómo interactuarán los componentes. Esto incluye la asignación de pines del microcontrolador, la elección de los protocolos de comunicación (One-Wire para DS18B20, I2C para LCD, Wi-Fi para la nube) y la estructura general del sistema (sensores $\rightarrow$ microcontrolador $\rightarrow$ nube $\rightarrow$ aplicación móvil).
 		\item \textbf{Diseño de Interfaces de Usuario (UI/UX):} Aunque no se documentó un diagrama de flujo formal, se conceptualizó la experiencia del usuario para la aplicación móvil. Esto incluyó el diseño de pantallas para la visualización de datos en tiempo real, el historial de mediciones, la configuración de alertas y la interfaz para la calibración de sensores. Se priorizó la claridad y la facilidad de uso.
 		\item \textbf{Diseño de Software (Firmware y Aplicación):} Se planificó la lógica del programa para el ESP32 (lectura de sensores, procesamiento, envío de datos) y la estructura de la aplicación móvil (recepción de datos, visualización, notificaciones).
@@ -376,7 +376,7 @@
 	\begin{enumerate}
 		\item \textbf{Ensamblaje del Hardware (Prototipado):} Los componentes seleccionados se conectaron físicamente. Inicialmente, esto se realizó en un protoboard para pruebas y validación de las conexiones eléctricas y la compatibilidad de los componentes.
 		\item \textbf{Desarrollo del Firmware:} Se escribió el código en C++ para el ESP32 utilizando el IDE de Arduino. Esto incluyó la implementación de las librerías necesarias para los sensores y el LCD, así como la lógica para la lectura de datos, el procesamiento, la gestión de la conectividad Wi-Fi y el envío de datos a un servidor en la nube.
-		\item \textbf{Desarrollo de la Aplicación Móvil:} Se programó la aplicación móvil (utilizando el framework o lenguaje de programación elegido) para conectarse al servidor en la nube, recibir los datos del ESP32, mostrarlos en la interfaz de usuario y gestionar las notificaciones push para las alertas.
+		\item \textbf{Desarrollo de la Aplicación Móvil:} Se programó la aplicación móvil utilizando Android Studio y el lenguaje Kotlin para conectarse a Firebase Realtime Database (servidor en la nube), recibir los datos enviados por el ESP32, mostrarlos en la interfaz de usuario en tiempo real y gestionar las notificaciones push para las alertas cuando los valores de los parámetros sobrepasen los rangos configurados.
 		\item \textbf{Integración y Pruebas Unitarias:} Cada componente y módulo de software se probó individualmente (por ejemplo, se verificó que el sensor de temperatura leía correctamente, que el LCD mostraba mensajes, que el ESP32 se conectaba a Wi-Fi).
 		\item \textbf{Pruebas de Integración y Sistema:} Una vez que los módulos funcionaban individualmente, se integraron para probar el sistema completo: desde la lectura de los sensores, el envío de datos a la nube, hasta la visualización en la aplicación móvil y la recepción de alertas. Se realizaron pruebas en condiciones reales para asegurar la precisión y fiabilidad.
 		\item \textbf{Calibración y Ajustes Finales:} Se realizaron calibraciones específicas para los sensores (especialmente el de pH) y se ajustaron los umbrales de alerta. Se optimizó el código para el rendimiento y el consumo de energía.
@@ -403,7 +403,7 @@
 		\item \textbf{Monitoreo Remoto y Automatización:} Al enviar los datos a la nube, el sistema permite que el usuario acceda a la información en tiempo real a través de una aplicación móvil, sin importar su ubicación. De esta manera, HYDRAWARE transforma un proceso manual y propenso a errores en un sistema de monitoreo automatizado y eficiente, lo cual es el objetivo principal de las aplicaciones de IoT en la industria.
 	\end{itemize}
 	
-
+	
 	
 	
 	\subsection{Descripción del proyecto a desarrollar}
@@ -427,7 +427,7 @@
 		%rgb
 	\end{itemize}
 	\textbf{Nota:} Las hojas de datos (datasheets) con las especificaciones técnicas detalladas de cada uno de estos componentes se pueden encontrar en la sección de Anexos al final de este documento.
-
+	
 	
 	\subsection{Descripción de Arduino (ESP32-WROOM-32)}
 	El ESP32-WROOM-32 es un módulo de microcontrolador (MCU) con conectividad Wi-Fi, Bluetooth y Bluetooth LE. Está diseñado para una variedad de aplicaciones, desde redes de sensores de baja potencia hasta tareas más exigentes como la codificación de voz y la transmisión de música. El núcleo del módulo es el chip ESP32-D0WDQ6.
@@ -444,6 +444,22 @@
 		\item \textbf{Interfaces del Módulo:}
 		\begin{itemize}
 			\item Soporta SD card, UART, SPI, SDIO, I2C, LED PWM, Motor PWM, I2S, IR, DAC, TWAI (compatible con CAN 2.0), sensor táctil capacitivo, ADC y contador de pulsos GPIO.
+			
+			\item \textbf{Interfaces para el proyecto HYDRAWARE:}
+			\begin{itemize}
+				\item \textbf{ADC (Conversor Analógico-Digital):} Permite leer la señal analógica del \textbf{sensor de pH}. El código del programa utiliza la siguiente fórmula de calibración para convertir el voltaje leído a un valor de pH:
+				\begin{verbatim}
+					// Fórmulas lineales para calcular pH en rangos ácido y básico
+					float m_acido = (7.0 - 4.0) / (voltagePH7 - voltagePH4);
+					float b_acido = 7.0 - m_acido * voltagePH7;
+					float m_basico = (10.0 - 7.0) / (voltagePH10 - voltagePH7);
+					float b_basico = 7.0 - m_basico * voltagePH7;
+				\end{verbatim}
+				\item \textbf{One-Wire:} Protocolo de bus de un solo cable, utilizado para la comunicación con el \textbf{sensor de temperatura digital DS18B20}. La librería de software para gestionar este protocolo es:
+				\begin{verbatim}
+					#include <DallasTemperature.h>
+				\end{verbatim}
+			\end{itemize}
 		\end{itemize}
 		
 		\item \textbf{Hardware Integrado:}
@@ -462,25 +478,9 @@
 			\item Dos microprocesadores Xtensa® 32-bit LX6 de baja potencia.
 			
 			\item 520 KB de SRAM en chip, 448 KB de ROM para arranque y 16 KB de SRAM en RTC.
-			
-			
 		\end{itemize}
 	\end{itemize}
 	
-	\subsubsection{Elementos principales:}
-	\begin{itemize}
-		\item Módulo ESP32-WROOM-32.
-		
-		\item Chip ESP32-D0WDQ6.
-		
-		\item Conectividad Wi-Fi y Bluetooth/Bluetooth LE.
-		
-		\item Flash SPI de 4 MB y cristal oscilador de 40 MHz.
-		
-		\item Pines GPIO, con los GPIO6 a GPIO11 conectados a la flash SPI y no recomendados para otros usos.
-		
-		
-	\end{itemize}
 	
 	\subsection{Software utilizado para la interfaz Usuario - Arduino}
 	El siguiente código fuente, desarrollado en el entorno del IDE de Arduino para la plataforma ESP32, es el corazón del sistema HYDRAWARE. Su propósito principal es gestionar la comunicación entre el hardware del microcontrolador y los servicios externos (Firebase Realtime Database), así como controlar los periféricos de entrada y salida para el monitoreo y la visualización local de los datos.
