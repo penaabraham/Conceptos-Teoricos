@@ -6,6 +6,7 @@
 \usepackage[a4paper, left=2cm, right=2cm, top=2.5cm, bottom=2.5cm]{geometry}
 \usepackage{xcolor} % Añadido para usar colores
 \usepackage{amsmath}
+\usepackage{float}
 
 % Definir un color para los títulos (puedes ajustar el color como quieras)
 \definecolor{azulUPP}{RGB}{0,70,128} % Un azul corporativo o tecnológico
@@ -229,16 +230,6 @@
 	\subsection{Programación de microcontroladores}
 	La programación de microcontroladores consiste en el arte y la técnica de escribir código que interactúe con el hardware físico para controlar el comportamiento del dispositivo. Para lograr esto, es fundamental comprender cómo el microcontrolador gestiona y procesa las señales del mundo real a través de sus interfaces.
 	
-	\subsubsection{Interfaces y Señales}
-	Para interactuar con el entorno físico, un microcontrolador debe ser capaz de manejar dos tipos de señales:
-	
-	\begin{itemize}
-		\item \textbf{Señal Analógica:} Una señal continua en el tiempo que puede tomar cualquier valor dentro de un rango determinado. Por ejemplo, la temperatura ambiente o la medición del pH son variables físicas que se representan con señales analógicas.
-		\item \textbf{Señal Digital:} Una señal discreta que solo puede tener un número limitado de estados, típicamente dos: \textit{Alto} (representado por 1) y \textit{Bajo} (representado por 0). Un interruptor encendido o apagado es un ejemplo de señal digital.
-	\end{itemize}
-	
-	Los \textbf{sistemas digitales} se caracterizan por su precisión y resistencia al ruido, ya que operan con estados definidos (1 y 0). En contraste, los \textbf{sistemas analógicos} se utilizan para capturar la variabilidad del mundo real, pero pueden ser más susceptibles a la distorsión. La mayoría de los microcontroladores modernos, como el ESP32, están diseñados para operar de manera digital, por lo que utilizan convertidores para interpretar datos analógicos.
-	
 	\subsubsection{Interfaces de Microcontroladores}
 	Una \textbf{interfaz de microcontroladores} es el conjunto de componentes de hardware y software que facilitan la comunicación y la transferencia de datos entre el microcontrolador y los periféricos externos. Sus características y tipos principales son:
 	
@@ -252,6 +243,18 @@
 			\item \textit{I2C (Inter-Integrated Circuit):} Protocolo serial de dos hilos (datos y reloj) que permite a múltiples dispositivos comunicarse con el microcontrolador. El display LCD 2x16 se conecta a través de I2C, lo que minimiza la cantidad de pines utilizados.
 		\end{itemize}
 	\end{itemize}
+	
+	\subsubsection{Interfaces y Señales}
+	Para interactuar con el entorno físico, un microcontrolador debe ser capaz de manejar dos tipos de señales:
+	
+	\begin{itemize}
+		\item \textbf{Señal Analógica:} Una señal continua en el tiempo que puede tomar cualquier valor dentro de un rango determinado. Por ejemplo, la temperatura ambiente o la medición del pH son variables físicas que se representan con señales analógicas.
+		\item \textbf{Señal Digital:} Una señal discreta que solo puede tener un número limitado de estados, típicamente dos: \textit{Alto} (representado por 1) y \textit{Bajo} (representado por 0). Un interruptor encendido o apagado es un ejemplo de señal digital.
+	\end{itemize}
+	
+	Los \textbf{sistemas digitales} se caracterizan por su precisión y resistencia al ruido, ya que operan con estados definidos (1 y 0). En contraste, los \textbf{sistemas analógicos} se utilizan para capturar la variabilidad del mundo real, pero pueden ser más susceptibles a la distorsión. La mayoría de los microcontroladores modernos, como el ESP32, están diseñados para operar de manera digital, por lo que utilizan convertidores para interpretar datos analógicos.
+	
+	
 	
 	\subsubsection{Periféricos de Entrada y Salida}
 	Los periféricos son los dispositivos externos que interactúan con el microcontrolador. Se dividen en dos categorías:
@@ -420,12 +423,21 @@
 	
 	\subsection{Materiales}
 	\begin{itemize}
-		\item Sensor de Temperatura Digital Ds18b20.
+		\item Sensor de Temperatura Digital Ds18b20
+		%temperatura
 		\item Adaptador para sensor Ds18b20
+		%adaptador
 		\item PH-4502C
+		%ph
 		\item Electrodo E201-BNC Tipo de sonda
-		\item Display LCD 2x16
+		%electrodo
+		\item 1.8 Color Tft Lcd Display St7735
+		%display
+		\item Led RGB
+		%rgb
 	\end{itemize}
+	\textbf{Nota:} Las hojas de datos (datasheets) con las especificaciones técnicas detalladas de cada uno de estos componentes se pueden encontrar en la sección de Anexos al final de este documento.
+
 	
 	\subsection{Descripción de Arduino (ESP32-WROOM-32)}
 	El ESP32-WROOM-32 es un módulo de microcontrolador (MCU) con conectividad Wi-Fi, Bluetooth y Bluetooth LE. Está diseñado para una variedad de aplicaciones, desde redes de sensores de baja potencia hasta tareas más exigentes como la codificación de voz y la transmisión de música. El núcleo del módulo es el chip ESP32-D0WDQ6.
@@ -809,10 +821,10 @@
 	\end{verbatim}
 	
 	
-	\subsubsection{Justificación del Software Seleccionado}
+	\subsection{Justificación del Software Seleccionado}
 	La elección del software para el desarrollo de un sistema embebido es tan crucial como la selección del hardware. En el proyecto HYDRAWARE, se optó por un conjunto de herramientas y tecnologías que no solo se ajustaban a las necesidades del ESP32, sino que también optimizaban la eficiencia, la escalabilidad y la facilidad de mantenimiento del proyecto.
 	
-	\paragraph{Lenguaje de Programación: C++}
+	\subsubsection{Lenguaje de Programación: C++}
 	Se seleccionó C++ como lenguaje de programación principal para el firmware del microcontrolador por las siguientes razones:
 	\begin{itemize}
 		\item \textbf{Control de Hardware de Bajo Nivel:} C++ permite una manipulación directa de la memoria y el hardware, lo cual es esencial para interactuar de manera eficiente con los pines GPIO, los conversores ADC y los protocolos de comunicación como One-Wire e I2C.
@@ -820,7 +832,7 @@
 		\item \textbf{Soporte de Librerías:} Existe una vasta colección de librerías para C++ optimizadas para el entorno de ESP32 y el IDE de Arduino. Esto acelera el desarrollo, ya que no es necesario programar desde cero las funcionalidades para los sensores, el display o la conectividad Wi-Fi.
 	\end{itemize}
 	
-	\paragraph{Entorno de Desarrollo Integrado (IDE): Arduino IDE}
+	\subsubsection{Entorno de Desarrollo Integrado (IDE): Arduino IDE}
 	Aunque existen otras opciones como PlatformIO, el IDE de Arduino fue seleccionado por su simplicidad y su curva de aprendizaje baja.
 	\begin{itemize}
 		\item \textbf{Facilidad de Uso:} La interfaz de Arduino IDE es intuitiva y fácil de configurar, lo que permite un desarrollo y prototipado rápido.
@@ -828,7 +840,7 @@
 		\item \textbf{Librerías Robustas:} El gestor de librerías de Arduino facilita la inclusión de código para componentes como el sensor de temperatura DS18B20 o el display TFT, lo que reduce drásticamente el tiempo de desarrollo.
 	\end{itemize}
 	
-	\paragraph{Servicio de Base de Datos: Firebase Realtime Database}
+	\subsubsection{Servicio de Base de Datos: Firebase Realtime Database}
 	Firebase, un producto de Google, fue elegido como el servicio de base de datos en la nube para HYDRAWARE por su naturaleza en tiempo real y su facilidad de integración.
 	\begin{itemize}
 		\item \textbf{Sincronización en Tiempo Real:} Como su nombre lo indica, la base de datos de Firebase sincroniza los datos instantáneamente con todos los clientes conectados (en este caso, el ESP32 y la aplicación móvil). Esto es fundamental para que el usuario reciba las mediciones del estanque de manera inmediata y para que el microcontrolador obtenga los umbrales de alerta actualizados de forma remota.
@@ -838,7 +850,57 @@
 	
 	La combinación de C++ para el rendimiento, el IDE de Arduino para la facilidad de desarrollo, y Firebase para la funcionalidad en tiempo real, crea un ecosistema de software robusto y eficiente que se adapta perfectamente a las necesidades de un proyecto de IoT como HYDRAWARE, permitiendo un monitoreo confiable y una interacción fluida con el usuario.
 	
+	\newpage
 	
-
-
+	\subsection{Anexos}
+	
+	En esta sección se incluyen las hojas de datos (datasheets) de los componentes clave utilizados en el proyecto.
+	
+	\subsubsection{Sensor de Temperatura Digital DS18B20}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.7\textwidth]{temperatura.png}
+		\caption{Datasheet del Sensor de Temperatura Digital DS18B20}
+		\label{fig:ds18b20_datasheet}
+	\end{figure}
+	
+	\subsubsection{Adaptador para Sensor DS18B20}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\textwidth]{adaptador.png}
+		\caption{Datasheet del Adaptador para Sensor DS18B20}
+		\label{fig:adaptador_ds18b20_datasheet}
+	\end{figure}
+	
+	\subsubsection{Módulo de Sensor de pH (PH-4502C)}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\textwidth]{ph.png}
+		\caption{Datasheet del Módulo de Sensor de pH PH-4502C}
+		\label{fig:ph_datasheet}
+	\end{figure}
+	
+	\subsubsection{Electrodo E201-BNC Tipo de Sonda}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\textwidth]{electrodo.png}
+		\caption{Datasheet del Electrodo de pH E201-BNC}
+		\label{fig:electrodo_datasheet}
+	\end{figure}
+	
+	\subsubsection{Display LCD TFT a Color de 1.8" (ST7735)}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\textwidth]{display.png}
+		\caption{Datasheet del Display LCD TFT ST7735}
+		\label{fig:display_datasheet}
+	\end{figure}
+	
+	\subsubsection{LED RGB}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\textwidth]{rgb.png}
+		\caption{Datasheet del LED RGB}
+		\label{fig:rgb_datasheet}
+	\end{figure}
 \end{document}
