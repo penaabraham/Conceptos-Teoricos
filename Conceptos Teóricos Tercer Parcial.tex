@@ -245,31 +245,21 @@
 	\end{itemize}
 	
 	\subsubsection{Interfaces y Señales}
-	Para interactuar con el entorno físico, un microcontrolador debe ser capaz de manejar dos tipos de señales:
+	Para interactuar con el entorno físico, un microcontrolador debe ser capaz de manejar dos tipos de señales fundamentales: la analógica, que refleja la variabilidad del mundo real, y la digital, que es el idioma binario del procesamiento computacional. El ESP32, como la mayoría de los microcontroladores modernos, utiliza interfaces especializadas para gestionar ambas.
 	
+	\paragraph{Señales Analógicas y Digitales}
 	\begin{itemize}
-		\item \textbf{Señal Analógica:} Una señal continua en el tiempo que puede tomar cualquier valor dentro de un rango determinado. Por ejemplo, la temperatura ambiente o la medición del pH son variables físicas que se representan con señales analógicas.
-		\item \textbf{Señal Digital:} Una señal discreta que solo puede tener un número limitado de estados, típicamente dos: \textit{Alto} (representado por 1) y \textit{Bajo} (representado por 0). Un interruptor encendido o apagado es un ejemplo de señal digital.
+		\item \textbf{Señal Analógica:} Una señal continua en el tiempo que puede tomar cualquier valor dentro de un rango predefinido. Es la representación directa de fenómenos físicos como la temperatura, la presión, la luz o, en el caso de HYDRAWARE, la medición del pH. Estas señales son inherentemente más propensas al ruido y a las fluctuaciones. El sensor de pH \texttt{PH-4502C} produce una señal analógica que varía en voltaje según el nivel de pH del agua.
+		
+		\item \textbf{Señal Digital:} Una señal discreta que solo puede tener un número limitado de estados lógicos, típicamente dos: \textit{Alto} (representado por un valor binario 1) y \textit{Bajo} (representado por un valor binario 0). Estas señales son robustas y precisas, ya que un ligero cambio de voltaje no altera su estado lógico. El sensor de temperatura \texttt{DS18B20} produce una señal digital que se comunica a través de un protocolo de bus conocido como \textit{One-Wire}.
 	\end{itemize}
 	
-	Los \textbf{sistemas digitales} se caracterizan por su precisión y resistencia al ruido, ya que operan con estados definidos (1 y 0). En contraste, los \textbf{sistemas analógicos} se utilizan para capturar la variabilidad del mundo real, pero pueden ser más susceptibles a la distorsión. La mayoría de los microcontroladores modernos, como el ESP32, están diseñados para operar de manera digital, por lo que utilizan convertidores para interpretar datos analógicos.
+	\paragraph{Sistemas Analógicos vs. Sistemas Digitales} \hfill\break
 	
+	Los \textbf{sistemas analógicos} se caracterizan por su capacidad para capturar información con una alta resolución teórica, reflejando la sutileza de los cambios en el mundo físico. Sin embargo, su vulnerabilidad a la distorsión y la necesidad de calibración constante los hace menos fiables en entornos ruidosos.
 	
+	En contraste, los \textbf{sistemas digitales} se caracterizan por su inmunidad al ruido y su precisión, ya que solo procesan datos binarios. Para que un microcontrolador digital, como el ESP32, pueda interpretar una señal analógica, necesita una interfaz especializada: un \textbf{Convertidor Analógico-Digital (ADC)}. El ADC toma la señal de voltaje continua del sensor de pH y la convierte en un valor numérico discreto que el microcontrolador puede utilizar para su procesamiento, comunicación y visualización. Este proceso es fundamental para que el proyecto HYDRAWARE pueda interpretar con fiabilidad los datos del entorno acuático.
 	
-	\subsubsection{Periféricos de Entrada y Salida}
-	Los periféricos son los dispositivos externos que interactúan con el microcontrolador. Se dividen en dos categorías:
-	
-	\begin{itemize}
-		\item \textbf{Periféricos de Entrada:} Dispositivos que proporcionan datos al microcontrolador para su procesamiento.
-		\begin{itemize}
-			\item \textbf{Sensor de Temperatura Digital DS18B20:} Este sensor de entrada digital utiliza el protocolo \textit{One-Wire} para enviar lecturas de temperatura precisas. Es crucial para monitorear la salud de los peces en el proyecto HYDRAWARE.
-			\item \textbf{Sensor de pH PH-4502C:} Es un sensor de entrada analógico. Mide el nivel de acidez o alcalinidad del agua y envía una señal analógica al ESP32 para que sea convertida a un valor digital a través del ADC.
-		\end{itemize}
-		\item \textbf{Periféricos de Salida:} Dispositivos que reciben señales del microcontrolador para ejecutar una acción o mostrar información.
-		\begin{itemize}
-			\item \textbf{Display LCD 2x16:} Este es un periférico de salida digital que recibe datos del microcontrolador a través de una interfaz I2C. Su función en HYDRAWARE es mostrar de manera local y en tiempo real las mediciones de temperatura y pH.
-		\end{itemize}
-	\end{itemize}
 	
 	\subsubsection{Proceso de Conexión y Programación}
 	El proceso de implementación se divide en dos fases principales: la conexión física (hardware) y el desarrollo lógico (software).
