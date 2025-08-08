@@ -398,7 +398,7 @@
 		
 		\item \textbf{Domótica:} La domótica se refiere a la automatización de la vivienda. Los microcontroladores se utilizan para crear dispositivos inteligentes que controlan la iluminación, la climatización, los sistemas de seguridad, los electrodomésticos y el entretenimiento. Un microcontrolador puede activar una alarma al detectar movimiento, ajustar la temperatura de un termostato o encender las luces de una habitación de forma remota, mejorando el confort y la eficiencia energética del hogar.
 		
-		\item \textbf{Internet de las Cosas (IoT):} El IoT es una red de dispositivos físicos ("cosas") que están integrados con sensores, software y otras tecnologías para conectarse e intercambiar datos con otros dispositivos y sistemas a través de internet. Los microcontroladores son el componente fundamental de la mayoría de los dispositivos IoT, ya que son los encargados de recolectar datos del entorno (usando sensores), procesarlos y, gracias a su conectividad inalámbrica, enviarlos a la nube o a otros dispositivos.
+		\item \textbf{Internet de las Cosas (IoT):} El IoT es una red de dispositivos físicos ('cosas') que están integrados con sensores, software y otras tecnologías para conectarse e intercambiar datos con otros dispositivos y sistemas a través de internet. Los microcontroladores son el componente fundamental de la mayoría de los dispositivos IoT, ya que son los encargados de recolectar datos del entorno (usando sensores), procesarlos y, gracias a su conectividad inalámbrica, enviarlos a la nube o a otros dispositivos.
 	\end{itemize}
 	
 	\paragraph{Integración en HYDRAWARE}
@@ -481,8 +481,363 @@
 	\end{itemize}
 	
 	\subsection{Software utilizado para la interfaz Usuario - Arduino}
+	El siguiente código fuente, desarrollado en el entorno del IDE de Arduino para la plataforma ESP32, es el corazón del sistema HYDRAWARE. Su propósito principal es gestionar la comunicación entre el hardware del microcontrolador y los servicios externos (Firebase Realtime Database), así como controlar los periféricos de entrada y salida para el monitoreo y la visualización local de los datos.
 	
-	\subsection{Justificacion del Software Seleccionado}
+	\subsubsection{Descripción del Código Fuente}
+	El programa se estructura en varias secciones clave, cada una encargada de una funcionalidad específica:
+	
+	\begin{itemize}
+		\item \textbf{Librerías y Definición de Constantes:} El código comienza incluyendo las librerías necesarias para el funcionamiento de los distintos módulos, como \texttt{WiFi.h} para la conectividad, \texttt{FirebaseESP32.h} para la comunicación con la base de datos, y las librerías para los sensores y el display. A continuación, se definen las constantes para la configuración de la red Wi-Fi, las credenciales de Firebase y la asignación de pines del ESP32 para cada componente.
+		
+		\item \textbf{Inicialización de Objetos y Variables:} Se crean las instancias globales de los objetos clave (\texttt{FirebaseData}, \texttt{OneWire}, \texttt{DallasTemperature}, \texttt{TFT\_eSPI}) que serán utilizados en todo el programa. Se declaran variables de tiempo para controlar la periodicidad de las lecturas y se establecen las constantes de calibración para el sensor de pH.
+		
+		\item \textbf{Funciones de Periféricos y Lógica:} Se definen funciones auxiliares para el control de los periféricos de salida:
+		\begin{itemize}
+			\item \texttt{setRGB()}: Controla el estado del LED RGB.
+			\item \texttt{setColorByPH()}: Asigna un color al LED RGB basándose en el valor de pH para proporcionar una indicación visual rápida.
+			\item \texttt{setTempLED()}: Enciende el LED correspondiente (frío, normal, caliente) según la temperatura actual y los límites definidos en Firebase.
+			\item \texttt{mostrarDatosEnPantalla()}: Actualiza el display TFT con los valores de pH, temperatura y voltaje de los sensores.
+		\end{itemize}
+		
+		\item \textbf{Comunicación con Firebase:} La función \texttt{leerConfiguracionFirebase()} es vital, ya que lee periódicamente los valores de \texttt{tempMin} y \texttt{tempMax} desde la base de datos en tiempo real de Firebase. Esto permite que el usuario pueda ajustar los umbrales de alerta de temperatura de manera remota a través de la aplicación móvil. El envío de datos se realiza en el \texttt{loop}, donde se crean objetos \texttt{FirebaseJson} para guardar las lecturas de los sensores en el historial y en el registro de la última lectura.
+		
+		\item \textbf{Estructura del Programa Principal (\texttt{setup()} y \texttt{loop()}):}
+		\begin{itemize}
+			\item \texttt{setup()}: Es la función que se ejecuta una sola vez al iniciar el programa. Su responsabilidad es inicializar la comunicación serial, configurar los pines de los LEDs, establecer la conexión Wi-Fi, sincronizar la hora del dispositivo a través de NTP, inicializar las librerías de sensores y Firebase, e iniciar el display TFT.
+			\item \texttt{loop()}: Se ejecuta de forma continua y es el corazón del sistema de monitoreo. Contiene la lógica para leer los sensores de temperatura y pH a intervalos definidos. Calcula el pH a partir del voltaje leído, actualiza los LEDs y el display TFT, y envía los datos a Firebase. También gestiona la actualización periódica de la configuración desde la base de datos.
+		\end{itemize}
+	\end{itemize}
+	
+	\subsubsection{Código del Programa}
+	El siguiente es el código fuente completo del firmware del microcontrolador ESP32:
+	
+	\begin{verbatim}
+		#include <WiFi.h>
+		#include <OneWire.h>
+		#include <DallasTemperature.h>
+		#include <FirebaseESP32.h>
+		#include <time.h>
+		#include <TFT_eSPI.h> 
+		
+		// --- Configuración WiFi ---
+		//#define WIFI_SSID "CF1_117 INTERNETSIS"
+		//#define WIFI_PASSWORD "bf7xykDAPE"
+		
+		// --- Configuración YO ---
+		#define WIFI_SSID "nova 11"
+		#define WIFI_PASSWORD "1234567891011"
+		
+		// --- Configuración Firebase ---
+		#define DATABASE_URL "https://proyectoesp32-8f321-default-rtdb.firebaseio.com"
+		#define DATABASE_SECRET "WmQm2cTzb2O5n9Tj4D9bEGliF87RA1p3kjhh8WXv"
+		
+		// --- Pines de sensores y LEDs ---
+		#define ONE_WIRE_BUS    21    // Pin del sensor de temperatura DS18B20
+		#define PH_SENSOR_PIN   36    // Pin de entrada analógica para sensor de pH
+		#define LED_BUILTIN     2     // LED de la placa
+		
+		#define LED_R           15    // LED Rojo (RGB)
+		#define LED_B           4     // LED Azul (RGB)
+		#define LED_G           5     // LED Verde (RGB)
+		
+		#define LED_FRIO        13    // LED para indicar temperatura baja
+		#define LED_NORMAL      12    // LED para indicar temperatura normal
+		#define LED_CALIENTE    14    // LED para indicar temperatura alta
+		
+		// --- Objetos globales ---
+		FirebaseData fbdo;
+		FirebaseAuth auth;
+		FirebaseConfig config;
+		
+		OneWire oneWire(ONE_WIRE_BUS);
+		DallasTemperature sensors(&oneWire);
+		TFT_eSPI tft = TFT_eSPI();
+		
+		// --- Variables de tiempo ---
+		unsigned long dataMillis = 0;
+		unsigned long configMillis = 0;
+		
+		// --- Calibración del sensor de pH ---
+		float voltagePH4  = 3.212;
+		float voltagePH7  = 2.7595;
+		float voltagePH10 = 2.2885;
+		
+		// Fórmulas lineales para calcular pH en rangos ácido y básico
+		float m_acido  = (7.0  - 4.0)  / (voltagePH7  - voltagePH4);
+		float b_acido  = 7.0  - m_acido  * voltagePH7;
+		float m_basico = (10.0 - 7.0)  / (voltagePH10 - voltagePH7);
+		float b_basico = 7.0  - m_basico * voltagePH7;
+		
+		// Ajustes manuales finos para calibración
+		float ajusteManualAcido  = 0.06; // --- Mayor a 7 --- FIJO 
+		float ajusteManualBasico = 0.1; // --- Menor a 7 --- FIJO
+		
+		// Límites de temperatura configurables desde Firebase
+		float tempMin = 0.0;
+		float tempMax = 0.0;
+		
+		// --- Control de LED RGB según color deseado ---
+		void setRGB(bool r, bool g, bool b) {
+			digitalWrite(LED_R, r ? HIGH : LOW);
+			digitalWrite(LED_G, g ? HIGH : LOW);
+			digitalWrite(LED_B, b ? HIGH : LOW);
+		}
+		
+		// --- Determina color del LED RGB según valor de pH ---
+		void setColorByPH(float pH) {
+			if      (pH < 1.0) setRGB(true,  false, false);
+			else if (pH < 6.0) setRGB(true,  true,  false);
+			else if (pH < 7.0) setRGB(true,  true,  true );
+			else if (pH < 8.0) setRGB(false, true,  false);
+			else if (pH < 10.0) setRGB(false, true,  true );
+			else if (pH < 12.0) setRGB(false, false, true );
+			else              setRGB(true,  false, true );
+		}
+		
+		// --- Enciende LED correspondiente según la temperatura ---
+		void setTempLED(float tempC) {
+			if (tempC < tempMin) {
+				digitalWrite(LED_FRIO,      HIGH);
+				digitalWrite(LED_NORMAL,    LOW);
+				digitalWrite(LED_CALIENTE, LOW);
+			} else if (tempC <= tempMax) {
+				digitalWrite(LED_FRIO,      LOW);
+				digitalWrite(LED_NORMAL,    HIGH);
+				digitalWrite(LED_CALIENTE, LOW);
+			} else {
+				digitalWrite(LED_FRIO,      LOW);
+				digitalWrite(LED_NORMAL,    LOW);
+				digitalWrite(LED_CALIENTE, HIGH);
+			}
+		}
+		
+		// --- Lee configuración desde Firebase Realtime Database ---
+		void leerConfiguracionFirebase() {
+			String pathConfig = "/tanques/tanque1/config";
+			
+			if (Firebase.getJSON(fbdo, pathConfig)) {
+				FirebaseJson &json = fbdo.jsonObject();
+				FirebaseJsonData jsonData;
+				
+				bool ok = json.get(jsonData, "tempMin");
+				if (ok) tempMin = jsonData.to<float>();
+				
+				ok = json.get(jsonData, "tempMax");
+				if (ok) tempMax = jsonData.to<float>();
+				
+				Serial.printf("Configuración leída: tempMin=%.2f, tempMax=%.2f\n", tempMin, tempMax);
+			} else {
+				Serial.printf("Error leyendo configuración: %s\n", fbdo.errorReason().c_str());
+			}
+		}
+		
+		// --- Muestra los datos en la pantalla TFT ---
+		void mostrarDatosEnPantalla(float pH, float temperatura, float voltaje) {
+			int screenW = tft.width();  // Ancho de pantalla (ej. 128)
+			int screenH = tft.height(); // Alto de pantalla (ej. 160)
+			
+			tft.fillScreen(TFT_BLACK);
+			
+			// Mostrar título
+			tft.setTextSize(1);
+			tft.setTextColor(TFT_WHITE);
+			const char* titulo = "Mediciones";
+			int txtWidth = strlen(titulo) * 6;
+			tft.setCursor((screenW - txtWidth) / 2, 5);
+			tft.print(titulo);
+			
+			// Mostrar valores
+			int baseX = 5, baseY = 30, lineHeight = 20;
+			char phTexto[20];
+			snprintf(phTexto, sizeof(phTexto), "pH: %.2f", pH);
+			tft.setTextSize(1.5);
+			tft.setCursor(baseX, baseY);
+			tft.print(phTexto);
+			
+			char tempTexto[30];
+			snprintf(tempTexto, sizeof(tempTexto), "Temp: %.2f C", temperatura);
+			tft.setCursor(baseX, baseY + lineHeight);
+			tft.print(tempTexto);
+			
+			char voltTexto[30];
+			snprintf(voltTexto, sizeof(voltTexto), "Volt: %.3f V", voltaje);
+			tft.setCursor(baseX, baseY + 2 * lineHeight);
+			tft.print(voltTexto);
+			
+			// Mostrar color relacionado al pH
+			uint16_t colorPH;
+			if      (pH < 1.0) colorPH = TFT_RED;
+			else if (pH < 4.0) colorPH = TFT_ORANGE;
+			else if (pH < 6.0) colorPH = TFT_YELLOW;
+			else if (pH < 7.0) colorPH = TFT_GREEN;
+			else if (pH < 8.0) colorPH = TFT_CYAN;
+			else if (pH < 10.0) colorPH = TFT_BLUE;
+			else if (pH < 12.0) colorPH = TFT_MAGENTA;
+			else colorPH = TFT_RED;
+			
+			tft.fillRect(screenW - 30, baseY, 20, 20, colorPH);
+		}
+		
+		// --- Función setup ---
+		void setup() {
+			Serial.begin(115200);
+			
+			// Configurar LEDs
+			pinMode(LED_BUILTIN, OUTPUT);
+			digitalWrite(LED_BUILTIN, HIGH);
+			pinMode(LED_R, OUTPUT);
+			pinMode(LED_G, OUTPUT);
+			pinMode(LED_B, OUTPUT);
+			setRGB(false, false, false);
+			pinMode(LED_FRIO, OUTPUT);
+			pinMode(LED_NORMAL, OUTPUT);
+			pinMode(LED_CALIENTE, OUTPUT);
+			
+			// Conexión WiFi
+			WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+			Serial.print("Conectando a WiFi");
+			while (WiFi.status() != WL_CONNECTED) {
+				Serial.print(".");
+				delay(300);
+			}
+			Serial.println();
+			Serial.printf("WiFi conectada. IP: %s\n", WiFi.localIP().toString().c_str());
+			
+			// Sincronización de hora (NTP)
+			configTime(0, 0, "pool.ntp.org", "time.nist.gov");
+			setenv("TZ", "CST6CDT,M4.1.0,M10.5.0", 1);
+			tzset();
+			time_t now = time(nullptr);
+			while (now < 100000) {
+				Serial.print(".");
+				delay(500);
+				now = time(nullptr);
+			}
+			Serial.println("\nHora sincronizada");
+			
+			// Inicializar sensores y Firebase
+			sensors.begin();
+			config.database_url = DATABASE_URL;
+			config.signer.tokens.legacy_token = DATABASE_SECRET;
+			Firebase.reconnectNetwork(true);
+			fbdo.setBSSLBufferSize(4096, 1024);
+			Firebase.begin(&config, &auth);
+			
+			// Inicializar pantalla TFT
+			tft.init();
+			tft.setRotation(1);
+			tft.fillScreen(TFT_BLACK);
+			
+			// Leer configuración desde Firebase
+			leerConfiguracionFirebase();
+			configMillis = millis();
+		}
+		
+		// --- Función loop principal ---
+		void loop() {
+			unsigned long currentMillis = millis();
+			
+			// Actualizar configuración cada 30 segundos
+			if (currentMillis - configMillis > 30000) {
+				leerConfiguracionFirebase();
+				configMillis = currentMillis;
+			}
+			
+			// Leer sensores cada 10 segundos
+			if (currentMillis - dataMillis > 10000) {
+				dataMillis = currentMillis;
+				
+				// Leer temperatura
+				sensors.requestTemperatures();
+				float temperatureC = sensors.getTempCByIndex(0);
+				
+				// Leer voltaje promedio del sensor de pH
+				const int numSamples = 20;
+				float sumV = 0;
+				for (int i = 0; i < numSamples; i++) {
+					int val = analogRead(PH_SENSOR_PIN);
+					float v = val * (3.3 / 4095.0);
+					float vr = v * ((10.0 + 10.0 + 10.0) / 20.0);
+					sumV += vr;
+					delay(10);
+				}
+				float voltageAvg = sumV / numSamples;
+				
+				float pHValue;  
+				if (voltageAvg > voltagePH7) {
+					pHValue = m_acido  * voltageAvg + b_acido  + ajusteManualAcido;
+				} else {
+					pHValue = m_basico * voltageAvg + b_basico + ajusteManualBasico;
+				}
+				
+				Serial.printf("Temp: %.2f °C | pH: %.2f | Voltaje: %.3f V\n", temperatureC, pHValue, voltageAvg);
+				
+				if (temperatureC != DEVICE_DISCONNECTED_C) {
+					setColorByPH(pHValue);
+					setTempLED(temperatureC);
+					mostrarDatosEnPantalla(pHValue, temperatureC, voltageAvg);
+				} else {
+					setRGB(false, false, true);  // Azul para error
+					digitalWrite(LED_FRIO, LOW);
+					digitalWrite(LED_NORMAL, LOW);
+					digitalWrite(LED_CALIENTE, LOW);
+				}
+				
+				// Enviar datos a Firebase (historial y última lectura)
+				time_t now = time(nullptr);
+				struct tm* tmInfo = localtime(&now);
+				char fecha[11], hora[9];
+				strftime(fecha, sizeof(fecha), "%Y-%m-%d", tmInfo);
+				strftime(hora, sizeof(hora), "%H:%M:%S", tmInfo);
+				
+				String pathH = String("/tanques/tanque1/historial/") + fecha + "_" + hora;
+				FirebaseJson jH;
+				jH.set("temperatura", temperatureC);
+				jH.set("ph", pHValue);
+				jH.set("fecha", fecha);
+				jH.set("hora", hora);
+				Firebase.setJSON(fbdo, pathH.c_str(), jH);
+				
+				FirebaseJson jU;
+				jU.set("temperatura", temperatureC);
+				jU.set("ph", pHValue);
+				jU.set("fecha", fecha);
+				jU.set("hora", hora);
+				Firebase.setJSON(fbdo, "/tanques/tanque1/ultimaLectura", jU);
+			}
+		}
+	\end{verbatim}
+	
+	
+	\subsubsection{Justificación del Software Seleccionado}
+	La elección del software para el desarrollo de un sistema embebido es tan crucial como la selección del hardware. En el proyecto HYDRAWARE, se optó por un conjunto de herramientas y tecnologías que no solo se ajustaban a las necesidades del ESP32, sino que también optimizaban la eficiencia, la escalabilidad y la facilidad de mantenimiento del proyecto.
+	
+	\paragraph{Lenguaje de Programación: C++}
+	Se seleccionó C++ como lenguaje de programación principal para el firmware del microcontrolador por las siguientes razones:
+	\begin{itemize}
+		\item \textbf{Control de Hardware de Bajo Nivel:} C++ permite una manipulación directa de la memoria y el hardware, lo cual es esencial para interactuar de manera eficiente con los pines GPIO, los conversores ADC y los protocolos de comunicación como One-Wire e I2C.
+		\item \textbf{Rendimiento y Eficiencia:} Al ser un lenguaje compilado, el código en C++ se ejecuta de manera muy rápida y con un consumo mínimo de recursos, lo que es vital para un microcontrolador con memoria y potencia de procesamiento limitadas.
+		\item \textbf{Soporte de Librerías:} Existe una vasta colección de librerías para C++ optimizadas para el entorno de ESP32 y el IDE de Arduino. Esto acelera el desarrollo, ya que no es necesario programar desde cero las funcionalidades para los sensores, el display o la conectividad Wi-Fi.
+	\end{itemize}
+	
+	\paragraph{Entorno de Desarrollo Integrado (IDE): Arduino IDE}
+	Aunque existen otras opciones como PlatformIO, el IDE de Arduino fue seleccionado por su simplicidad y su curva de aprendizaje baja.
+	\begin{itemize}
+		\item \textbf{Facilidad de Uso:} La interfaz de Arduino IDE es intuitiva y fácil de configurar, lo que permite un desarrollo y prototipado rápido.
+		\item \textbf{Comunidad y Documentación:} La enorme comunidad de Arduino y la abundante documentación en línea facilitan la resolución de problemas y la búsqueda de ejemplos de código para casi cualquier periférico.
+		\item \textbf{Librerías Robustas:} El gestor de librerías de Arduino facilita la inclusión de código para componentes como el sensor de temperatura DS18B20 o el display TFT, lo que reduce drásticamente el tiempo de desarrollo.
+	\end{itemize}
+	
+	\paragraph{Servicio de Base de Datos: Firebase Realtime Database}
+	Firebase, un producto de Google, fue elegido como el servicio de base de datos en la nube para HYDRAWARE por su naturaleza en tiempo real y su facilidad de integración.
+	\begin{itemize}
+		\item \textbf{Sincronización en Tiempo Real:} Como su nombre lo indica, la base de datos de Firebase sincroniza los datos instantáneamente con todos los clientes conectados (en este caso, el ESP32 y la aplicación móvil). Esto es fundamental para que el usuario reciba las mediciones del estanque de manera inmediata y para que el microcontrolador obtenga los umbrales de alerta actualizados de forma remota.
+		\item \textbf{Facilidad de Integración:} La librería \texttt{FirebaseESP32.h} simplifica enormemente la comunicación con la base de datos desde el microcontrolador, permitiendo la lectura y escritura de datos con pocas líneas de código.
+		\item \textbf{Alertas Basadas en Eventos:} Firebase permite configurar 'reglas' y 'funciones en la nube' para disparar acciones automáticas (como el envío de notificaciones push) cuando un dato cambia en la base de datos. Esta funcionalidad es clave para el sistema de alertas de HYDRAWARE.
+	\end{itemize}
+	
+	La combinación de C++ para el rendimiento, el IDE de Arduino para la facilidad de desarrollo, y Firebase para la funcionalidad en tiempo real, crea un ecosistema de software robusto y eficiente que se adapta perfectamente a las necesidades de un proyecto de IoT como HYDRAWARE, permitiendo un monitoreo confiable y una interacción fluida con el usuario.
+	
 	
 
 
